@@ -37,12 +37,32 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django.contrib.sites", 
 
     "rest_framework", 
     "corsheaders", 
-    
+    "rest_framework.authtoken",
+    'dj_rest_auth',
+    "allauth", # new
+    "allauth.account", # new
+    'dj_rest_auth.registration',
+    "allauth.socialaccount", 
+    "allauth.socialaccount.providers.google",
     "accounts.apps.AccountsConfig",
 ]
+
+
+REST_FRAMEWORK = {
+"DEFAULT_PERMISSION_CLASSES": [
+    "rest_framework.permissions.IsAuthenticated",
+],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication", # new
+    ],
+}
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -69,7 +89,7 @@ ROOT_URLCONF = 'g6api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR/'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,6 +101,14 @@ TEMPLATES = [
         },
     },
 ]
+
+
+SITE_ID = 1
+AUTHENTICATION_BACKENDS = (
+"django.contrib.auth.backends.ModelBackend",
+"allauth.account.auth_backends.AuthenticationBackend", # new
+)
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # new
 
 WSGI_APPLICATION = 'g6api.wsgi.application'
 
@@ -139,3 +167,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
+ACCOUNT_USERNAME_REQUIRED = True # new
+ACCOUNT_AUTHENTICATION_METHOD = "username_email" # new
+ACCOUNT_EMAIL_REQUIRED = True # new
+ACCOUNT_UNIQUE_EMAIL = True # new
+ACCOUNT_EMAIL_VERIFICATION ='optional'
+# ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS =3  in days
+# ACCOUNT_USERNAME_BLACKLIST =[]
+ACCOUNT_CONFIRM_EMAIL_ON_GET =True
+LOGIN_URL="https://google.com"
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL =LOGIN_URL
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL =LOGIN_URL
