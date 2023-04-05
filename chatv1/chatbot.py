@@ -1,10 +1,13 @@
 import openai
 import datetime 
 import tiktoken
+from environs import Env # new
+
+env = Env() # new
+env.read_env() # new
 
 
-
-openai.api_key="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"
+openai.api_key=env.str("OPENAI_APIKEY")
 
 def tokens_calc(string, encoding = tiktoken.get_encoding("cl100k_base")):
     encoded_string = encoding.encode(string)

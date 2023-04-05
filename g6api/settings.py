@@ -82,6 +82,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:3000",
     "http://localhost:8000",
+    "http://127.0.0.1:8000",
 )
 
 # frontendhost
@@ -111,7 +112,21 @@ AUTHENTICATION_BACKENDS = (
 "django.contrib.auth.backends.ModelBackend",
 "allauth.account.auth_backends.AuthenticationBackend", # new
 )
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # new
+
+
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # new
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" # new
+
+DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL")
+EMAIL_HOST = "smtp.sendgrid.net"
+EMAIL_HOST_USER = "apikey"
+EMAIL_HOST_PASSWORD = "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"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+# ACCOUNT_EMAIL_CONFIRMATION_HMAC =False
+
+
+
 
 WSGI_APPLICATION = 'g6api.wsgi.application'
 
@@ -119,16 +134,16 @@ WSGI_APPLICATION = 'g6api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": env.dj_db_url("DATABASE_URL") # new
 }
 
-# DATABASES = {
-#     "default": env.dj_db_url("DATABASE_URL") # new
-# }
 
 
 
@@ -182,7 +197,7 @@ ACCOUNT_USERNAME_REQUIRED = True # new
 ACCOUNT_AUTHENTICATION_METHOD = "username_email" # new
 ACCOUNT_EMAIL_REQUIRED = True # new
 ACCOUNT_UNIQUE_EMAIL = True # new
-ACCOUNT_EMAIL_VERIFICATION ='optional'
+ACCOUNT_EMAIL_VERIFICATION ='mandatory'
 # ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS =3  in days
 # ACCOUNT_USERNAME_BLACKLIST =[]
 ACCOUNT_CONFIRM_EMAIL_ON_GET =True

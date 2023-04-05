@@ -1,7 +1,12 @@
 from django.urls import path,include,re_path
 from django.views.generic import TemplateView
+from dj_rest_auth.views import (
+    LoginView, LogoutView, PasswordChangeView, PasswordResetConfirmView,
+    PasswordResetView, UserDetailsView,
+)
+from dj_rest_auth.registration.views import (RegisterView, VerifyEmailView, ResendEmailVerificationView)
 
-from dj_rest_auth.registration.views import VerifyEmailView
+
 from .views import GoogleLogin#, google_callback, oauth2_callback, oauth2_login
 # from allauth.account.views import confirm_email as allauthemailconfirmation
 
@@ -16,25 +21,33 @@ urlpatterns =[
       name='password_reset_confirm'),
 
 
-    ####account_confirm_email - You should override this view to handle it in your API client somehow and then,
-    ####send post to /verify-email/ endpoint with proper key.
-    # ImproperlyConfigured at /api/v1/auth/registration/account-confirm-email/NQ:1phztT:8EioupJYCqG1RtQu9FhYNodDv2KPw2TBQLVehhGVefk/ TemplateResponseMixin requires either a definition of 'template_name' or an implementation of 'get_template_names()'
-    # path('registration/account-confirm-email/<token>/', allauthemailconfirmation, name='account_email_verification_sent'),
-    
-    path('registration/account-confirm-email/<token>/', VerifyEmailView.as_view(), name='account_email_verification_sent'),
-    path('', include('dj_rest_auth.urls')),
-    path('registration/', include('dj_rest_auth.registration.urls')),
-    path('google/login', GoogleLogin.as_view(), name='google_login'),
 
-    # path('google/callback/', oauth2_callback, name='google_callback'),
-    # path('google/callback/', google_callback, name='custom_google_callback'),
-    # path('google/url/', oauth2_login),
+    path('registration/account-confirm-email/<token>/', VerifyEmailView.as_view(), name='account_email_verification_sent'),
+
+
+    #### path('', include('dj_rest_auth.urls')),
+    # URLs that do not require a session or valid token
+    path('password/reset/', PasswordResetView.as_view(), name='rest_password_reset'),
+    path('password/reset/confirm/', PasswordResetConfirmView.as_view(), name='rest_password_reset_confirm'),
+    path('login/', LoginView.as_view(), name='rest_login'),
+    # URLs that require a user to be logged in with a valid session / token.
+    path('logout/', LogoutView.as_view(), name='rest_logout'),
+    path('user/', UserDetailsView.as_view(), name='rest_user_details'),
+    path('password/change/', PasswordChangeView.as_view(), name='rest_password_change'),
+
+    
+    #### path('registration/', include('dj_rest_auth.registration.urls')),
+    
+    path('registration/', RegisterView.as_view(), name='rest_register'),
+    path('registration/verify-email/', VerifyEmailView.as_view(), name='rest_verify_email'),
+    path('registration/resend-email/', ResendEmailVerificationView.as_view(), name="rest_resend_email"),
 
 
 
 
     # path('account/', include('allauth.urls')),
 ]
+
 # from allauth.account.urls
 # api/v1/auth/ password/reset/ [name='rest_password_reset']
 # api/v1/auth/ password/reset/confirm/ [name='rest_password_reset_confirm']

@@ -9,7 +9,7 @@ import urllib.parse
 
 class GoogleLogin(SocialLoginView): # if you want to use Authorization Code Grant, use this
     adapter_class = GoogleOAuth2Adapter
-    callback_url = "'http://localhost:8000/accounts/google/login/callback/'"
+    callback_url = "http://localhost:8000/accounts/google/login/callback/"
     client_class = OAuth2Client
     
 #     def get_callback_url(self, request, *args, **kwargs):

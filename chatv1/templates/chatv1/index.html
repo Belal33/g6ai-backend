@@ -267,18 +267,18 @@
         /*border: solid var(--green1, #25ae88) 2px;*/
         font-size: 20px;
       }
-      .response .massage {
+      .response .message {
         width: 60%;
         padding: 5px;
         border-radius: 5px;
         background-color: #55608075;
         margin: 5px;
       }
-      .response .massage:nth-child(even) {
+      .response .message:nth-child(even) {
         float: right;
         background-color: #00cc9275;
       }
-      .response .massage:nth-child(odd) {
+      .response .message:nth-child(odd) {
         background-color: #ff5f5c91;
         float: left;
       }
@@ -291,9 +291,9 @@
         <div class="container">
           <div class="response"></div>
 
-          <form>
+          <form class="message-form">
             <input
-              placeholder="Enter Your Massage"
+              placeholder="Enter Your Message"
               type="text"
               name="prompt"
               class="prompt-input"
@@ -307,30 +307,30 @@
     <!-- end page -->
 
     <script>
-      let old_massges = localStorage.getItem("old_massage") || null;
-      if (old_massges) {
-        //console.log(JSON.parse(old_massges));
-        old_massges = JSON.parse(old_massges);
-        createMassagesDiv(old_massges.messages);
+      let old_messges = localStorage.getItem("old_message") || null;
+      if (old_messges) {
+        console.log(JSON.parse(old_messges));
+        old_messges = JSON.parse(old_messges);
+        createMessagesDiv(old_messges.messages);
       }
-      const form = document.forms[0];
+      const form = document.querySelector(".message-form");
       form.onsubmit = async (e) => {
         e.preventDefault();
-        let old_massges = localStorage.getItem("old_massage") || null;
+        let old_messges = localStorage.getItem("old_message") || null;
         let data = {};
-        if (old_massges) {
+        if (old_messges) {
           data = {
-            massage: form.prompt.value,
-            old_massges: JSON.parse(old_massges),
+            message: form.prompt.value,
+            old_messges: JSON.parse(old_messges),
           };
         } else {
           data = {
-            massage: form.prompt.value,
+            message: form.prompt.value,
           };
         }
         form.prompt.value = "wait...";
 
-        let res = await fetch("https://gpt-chat-project1.herokuapp.com/chat/", {
+        let res = await fetch("http://127.0.0.1:8000/chat/", {
           method: "POST",
           headers: {
             "Content-type": "application/json",
@@ -344,7 +344,7 @@
             return res.json();
           })
           .then((jres) => {
-            old_massges = {
+            old_messges = {
               initialization_time: jres.initialization_time,
               system_messages: jres.system_messages,
               messages: jres.messages,
@@ -352,18 +352,19 @@
               n_tokens: jres.n_tokens,
               n_returned_messages: jres.n_returned_messages,
             };
-            localStorage.setItem("old_massage", JSON.stringify(old_massges));
-            console.log(old_massges.messages[0]);
-            createMassagesDiv(old_massges.messages);
+            localStorage.setItem("old_message", JSON.stringify(old_messges));
+            console.log(old_messges.messages[0]);
+            createMessagesDiv(old_messges.messages);
             form.prompt.value = "";
           });
       };
-      function createMassagesDiv(messages) {
+
+      function createMessagesDiv(messages) {
         let responsdiv = document.querySelector(".response");
         responsdiv.innerHTML = "";
         messages.forEach((el) => {
           const massegediv = document.createElement("div");
-          massegediv.className = "massage";
+          massegediv.className = "message";
           massegediv.innerHTML = el;
           responsdiv.prepend(massegediv);
         });
