@@ -140,9 +140,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-DATABASES = {
-    "default": env.dj_db_url("DATABASE_URL") # new
-}
+# DATABASES = {
+#     "default": env.dj_db_url("DATABASE_URL") # new
+# }
 
 
 
