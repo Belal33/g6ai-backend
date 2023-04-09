@@ -121,12 +121,13 @@ DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL")
 EMAIL_HOST = "smtp.sendgrid.net"
 EMAIL_HOST_USER = "apikey"
 EMAIL_HOST_PASSWORD =  env.str("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = 587
+EMAIL_PORT = 465
 EMAIL_USE_TLS = True
-# ACCOUNT_EMAIL_CONFIRMATION_HMAC =False
+SENDGRID_API_KEY = env.str("DEFAULT_FROM_EMAIL")
 
 
-
+# send_mail('Subject here', 'Here is the message.','gptproject1@gmail.com', ['belalelbanna7@gmail.com'], fail_silently=False)
+# from django.core.mail import send_mail
 
 WSGI_APPLICATION = 'g6api.wsgi.application'
 
@@ -206,9 +207,8 @@ ACCOUNT_EMAIL_VERIFICATION ='mandatory'
 # ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS =3  in days
 # ACCOUNT_USERNAME_BLACKLIST =[]
 ACCOUNT_CONFIRM_EMAIL_ON_GET =True
-# LOGIN_URL="https://google.com"
-# ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL =LOGIN_URL
-# ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL =LOGIN_URL
+LOGIN_URL = 'http://localhost:8000/api/v1/auth/login/'
+
 
 
 
@@ -225,5 +225,4 @@ SOCIALACCOUNT_PROVIDERS = {
         'OAUTH_PKCE_ENABLED': True,
     }
 }
-
 
