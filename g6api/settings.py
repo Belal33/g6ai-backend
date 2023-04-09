@@ -83,10 +83,11 @@ CORS_ORIGIN_WHITELIST = (
     "http://localhost:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "https://g6ai-backend.herokuapp.com/",
 )
 
 # frontendhost
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"] # new
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000","https://g6ai-backend.herokuapp.com/"] # new
 
 ROOT_URLCONF = 'g6api.urls'
 
@@ -203,11 +204,11 @@ ACCOUNT_USERNAME_REQUIRED = True # new
 ACCOUNT_AUTHENTICATION_METHOD = "username_email" # new
 ACCOUNT_EMAIL_REQUIRED = True # new
 ACCOUNT_UNIQUE_EMAIL = True # new
-ACCOUNT_EMAIL_VERIFICATION ='mandatory'
+ACCOUNT_EMAIL_VERIFICATION = "optional"  #'mandatory'
 # ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS =3  in days
 # ACCOUNT_USERNAME_BLACKLIST =[]
 ACCOUNT_CONFIRM_EMAIL_ON_GET =True
-LOGIN_URL = 'http://localhost:8000/api/v1/auth/login/'
+LOGIN_URL = 'https://g6ai-backend.herokuapp.com/api/v1/auth/login/'
 
 
 
