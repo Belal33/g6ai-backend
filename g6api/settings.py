@@ -83,7 +83,7 @@ CORS_ORIGIN_WHITELIST = (
     "http://localhost:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "https://g6ai-backend.herokuapp.com/",
+    "https://g6ai-backend.herokuapp.com",
 )
 
 # frontendhost
@@ -119,12 +119,12 @@ AUTHENTICATION_BACKENDS = (
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" # new
 
 DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL")
-EMAIL_HOST = "smtp.sendgrid.net"
-EMAIL_HOST_USER = "apikey"
+EMAIL_HOST = "email-smtp.eu-north-1.amazonaws.com"
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD =  env.str("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = 465
+EMAIL_PORT = 25 
 EMAIL_USE_TLS = True
-SENDGRID_API_KEY = env.str("DEFAULT_FROM_EMAIL")
+
 
 
 # send_mail('Subject here', 'Here is the message.','gptproject1@gmail.com', ['belalelbanna7@gmail.com'], fail_silently=False)
