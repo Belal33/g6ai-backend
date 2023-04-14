@@ -1,6 +1,6 @@
 from pathlib import Path
 from environs import Env # new
-
+from datetime import timedelta
 env = Env() # new
 env.read_env() # new
 
@@ -11,8 +11,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-2rq6ew)$)nuo56lal!t9=f6l@w(8ev4)p42=1@=qyz1_4l1&v)'
 SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -20,7 +18,7 @@ DEBUG = env.bool("DEBUG", default=False)
 # DEBUG = True
 
 
-ALLOWED_HOSTS =  [".herokuapp.com", "localhost", "127.0.0.1"] 
+ALLOWED_HOSTS =  [".chatg6.ai",".herokuapp.com", "localhost", "127.0.0.1"] 
 
 
 # Application definition
@@ -37,7 +35,8 @@ INSTALLED_APPS = [
 
     "rest_framework", 
     "corsheaders", 
-    "rest_framework.authtoken",
+    # "rest_framework.authtoken",
+    'rest_framework_simplejwt',
     'dj_rest_auth',
     "allauth", # new
     "allauth.account", # new
@@ -50,15 +49,101 @@ INSTALLED_APPS = [
     "chatv1.apps.Chatv1Config",
 ]
 
+REST_USE_JWT=True
+JWT_AUTH_COOKIE = "g6-auth"
+
 
 REST_FRAMEWORK = {
-"DEFAULT_PERMISSION_CLASSES": [
-    "rest_framework.permissions.IsAuthenticated",
-],
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication", # new
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
     ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
+        # "rest_framework.authentication.TokenAuthentication", # new
+    ],
+}
+
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=90),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "UPDATE_LAST_LOGIN": False,
+
+    "ALGORITHM": "HS256",
+    "VERIFYING_KEY": "",
+    "AUDIENCE": None,
+    "ISSUER": None,
+    "JSON_ENCODER": None,
+    "JWK_URL": None,
+    "LEEWAY": 0,
+
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
+
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_TYPE_CLAIM": "token_type",
+    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
+
+    "JTI_CLAIM": "jti",
+
+    "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
+    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
+    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
+
+    "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
+    "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
+    "TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
+    "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
+    "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
+    "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
+}
+
+REST_AUTH = {
+    "USE_JWT": True,
+    "JWT_AUTH_COOKIE": "g6-auth",
+    "JWT_AUTH_REFRESH_COOKIE": "g6-refresh-token",
+    'JWT_AUTH_RETURN_EXPIRATION': True,
+}
+REST_AUTH = {
+    'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',
+    'TOKEN_SERIALIZER': 'dj_rest_auth.serializers.TokenSerializer',
+    'JWT_SERIALIZER': 'dj_rest_auth.serializers.JWTSerializer',
+    'JWT_SERIALIZER_WITH_EXPIRATION': 'dj_rest_auth.serializers.JWTSerializerWithExpiration',
+    'JWT_TOKEN_CLAIMS_SERIALIZER': 'rest_framework_simplejwt.serializers.TokenObtainPairSerializer',
+    'USER_DETAILS_SERIALIZER': 'dj_rest_auth.serializers.UserDetailsSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'dj_rest_auth.serializers.PasswordResetSerializer',
+    'PASSWORD_RESET_CONFIRM_SERIALIZER': 'dj_rest_auth.serializers.PasswordResetConfirmSerializer',
+    'PASSWORD_CHANGE_SERIALIZER': 'dj_rest_auth.serializers.PasswordChangeSerializer',
+
+    'REGISTER_SERIALIZER': 'dj_rest_auth.registration.serializers.RegisterSerializer',
+
+    'REGISTER_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
+
+    'TOKEN_MODEL': 'rest_framework.authtoken.models.Token',
+    'TOKEN_CREATOR': 'dj_rest_auth.utils.default_create_token',
+
+    'PASSWORD_RESET_USE_SITES_DOMAIN': False,
+    'OLD_PASSWORD_FIELD_ENABLED': False,
+    'LOGOUT_ON_PASSWORD_CHANGE': False,
+    'SESSION_LOGIN': True,
+    "USE_JWT": True,
+
+    "JWT_AUTH_COOKIE": "g6-auth",
+    "JWT_AUTH_REFRESH_COOKIE": "g6-refresh-token",
+    'JWT_AUTH_REFRESH_COOKIE_PATH': '/',
+    'JWT_AUTH_SECURE': False,
+    'JWT_AUTH_HTTPONLY': True,
+    'JWT_AUTH_SAMESITE': 'Lax',
+    'JWT_AUTH_RETURN_EXPIRATION': True,
+    'JWT_AUTH_COOKIE_USE_CSRF': False,
+    'JWT_AUTH_COOKIE_ENFORCE_CSRF_ON_UNAUTHENTICATED': False,
 }
 
 
@@ -84,10 +169,12 @@ CORS_ORIGIN_WHITELIST = (
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "https://g6ai-backend.herokuapp.com",
+    "https://api.chatg6.ai",
+    "https://chatg6.ai",
 )
 
 # frontendhost
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000","https://g6ai-backend.herokuapp.com/"] # new
+CSRF_TRUSTED_ORIGINS = ["https://chatg6.ai","http://localhost:3000","https://g6ai-backend.herokuapp.com/"] # new
 
 ROOT_URLCONF = 'g6api.urls'
 
@@ -110,8 +197,8 @@ TEMPLATES = [
 
 SITE_ID = 1
 AUTHENTICATION_BACKENDS = (
-"django.contrib.auth.backends.ModelBackend",
-"allauth.account.auth_backends.AuthenticationBackend", # new
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend", # new
 )
 
 
@@ -121,10 +208,7 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" # new
 ########## AWS ##########
 # DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL")
 # EMAIL_HOST = "email-smtp.eu-north-1.amazonaws.com"
-# EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
-# EMAIL_HOST_PASSWORD =  env.str("EMAIL_HOST_PASSWORD")
 # EMAIL_PORT = 25 
-# EMAIL_USE_TLS = True
 ########## AWS ##########
 
 # DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL")
