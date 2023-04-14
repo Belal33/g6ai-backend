@@ -18,7 +18,7 @@ DEBUG = env.bool("DEBUG", default=False)
 # DEBUG = True
 
 
-ALLOWED_HOSTS =  ["api.chatg6.ai",".herokuapp.com", "localhost", "127.0.0.1"] 
+ALLOWED_HOSTS =  ["api.chatg6.ai",".chatg6.ai",".herokuapp.com", "localhost", "127.0.0.1"] 
 
 
 # Application definition
