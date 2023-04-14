@@ -18,7 +18,7 @@ DEBUG = env.bool("DEBUG", default=False)
 # DEBUG = True
 
 
-ALLOWED_HOSTS =  [".chatg6.ai",".herokuapp.com", "localhost", "127.0.0.1"] 
+ALLOWED_HOSTS =  ["api.chatg6.ai",".herokuapp.com", "localhost", "127.0.0.1"] 
 
 
 # Application definition
@@ -105,12 +105,6 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
-REST_AUTH = {
-    "USE_JWT": True,
-    "JWT_AUTH_COOKIE": "g6-auth",
-    "JWT_AUTH_REFRESH_COOKIE": "g6-refresh-token",
-    'JWT_AUTH_RETURN_EXPIRATION': True,
-}
 REST_AUTH = {
     'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',
     'TOKEN_SERIALIZER': 'dj_rest_auth.serializers.TokenSerializer',
