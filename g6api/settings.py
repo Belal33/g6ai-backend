@@ -165,6 +165,7 @@ CORS_ORIGIN_WHITELIST = (
     "https://g6ai-backend.herokuapp.com",
     "https://api.chatg6.ai",
     "https://chatg6.ai",
+    "https://www.chatg6.ai",
 )
 
 # frontendhost
@@ -313,3 +314,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+
+if not DEBUG :
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
