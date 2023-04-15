@@ -9,7 +9,7 @@ from dj_rest_auth.registration.views import (SocialAccountListView,ConfirmEmailV
 from dj_rest_auth.jwt_auth import get_refresh_view
 from rest_framework_simplejwt.views import TokenVerifyView
 
-from .views import GoogleLogin#, google_callback, oauth2_callback, oauth2_login
+from .views import GoogleLogin  #, google_callback, oauth2_callback, oauth2_login
 # from allauth.account.views import confirm_email as allauthemailconfirmation
 
 # from dj_rest_auth.registration.urls 

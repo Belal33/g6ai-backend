@@ -116,7 +116,7 @@ REST_AUTH = {
     'PASSWORD_RESET_CONFIRM_SERIALIZER': 'dj_rest_auth.serializers.PasswordResetConfirmSerializer',
     'PASSWORD_CHANGE_SERIALIZER': 'dj_rest_auth.serializers.PasswordChangeSerializer',
 
-    'REGISTER_SERIALIZER': 'dj_rest_auth.registration.serializers.RegisterSerializer',
+    'REGISTER_SERIALIZER': 'accounts.serializers.MyRegisterSerializer',
 
     'REGISTER_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
 
@@ -140,7 +140,9 @@ REST_AUTH = {
     'JWT_AUTH_COOKIE_ENFORCE_CSRF_ON_UNAUTHENTICATED': False,
 }
 
-
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'accounts.serializers.MyRegisterSerializer'
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -292,6 +294,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "username_email" # new
 ACCOUNT_EMAIL_REQUIRED = True # new
 ACCOUNT_UNIQUE_EMAIL = True # new
 ACCOUNT_EMAIL_VERIFICATION = "optional"  #'mandatory'
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE =False
 # ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS =3  in days
 # ACCOUNT_USERNAME_BLACKLIST =[]
 ACCOUNT_CONFIRM_EMAIL_ON_GET =True
