@@ -1,29 +1,21 @@
 from dj_rest_auth.registration.serializers import RegisterSerializer
-
+from rest_framework import serializers
 
 class MyRegisterSerializer(RegisterSerializer):
   password2 = None
+  password = serializers.CharField(write_only=True )  
+  password1 = password 
 
   def validate(self, data):
       return data
 
 # class RegisterSerializer(serializers.Serializer):
 
-    # password1 = serializers.CharField(write_only=True)
     # password2 = None
 
-    # def validate_username(self, username):
-    #     username = get_adapter().clean_username(username)
-    #     return username
 
-    # def validate_email(self, email):
-    #     email = get_adapter().clean_email(email)
-    #     if allauth_settings.UNIQUE_EMAIL:
-    #         if email and email_address_exists(email):
-    #             raise serializers.ValidationError(
-    #                 _('A user is already registered with this e-mail address.'),
-    #             )
-    #     return email
+
+
 
     # def validate_password1(self, password):
     #     return get_adapter().clean_password(password)
