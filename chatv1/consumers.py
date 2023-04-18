@@ -7,6 +7,8 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
       self.accept()
       print(self.scope["user"].username)
       
+      print(self.scope["user"])
+      # print(self.scope["user"].email)
 
     def disconnect(self, close_code):
         ...

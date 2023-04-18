@@ -20,7 +20,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'g6api.settings')
 
 application = ProtocolTypeRouter({
   
-    "http": get_asgi_application(),
+    "https": get_asgi_application(),
     "websocket": TokenAuthMiddleWare(
       AllowedHostsOriginValidator(
           URLRouter(
