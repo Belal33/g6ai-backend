@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .chatbot import GPT_simplified
+from .chatbot1 import GPT_simplified
 from django.http.response import JsonResponse
 from rest_framework.views import Response 
 from rest_framework.decorators import api_view ,permission_classes

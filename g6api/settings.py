@@ -24,6 +24,7 @@ ALLOWED_HOSTS =  ["api.chatg6.ai",".chatg6.ai",".herokuapp.com", "localhost", "1
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -36,7 +37,6 @@ INSTALLED_APPS = [
     "rest_framework", 
     "corsheaders", 
     "rest_framework.authtoken",
-    # 'rest_framework_simplejwt',
     'dj_rest_auth',
     "allauth", # new
     "allauth.account", # new
@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     "chatv1.apps.Chatv1Config",
 ]
 
-
+ASGI_APPLICATION = "g6api.asgi.application"
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
@@ -66,6 +66,7 @@ REST_FRAMEWORK = {
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'accounts.serializers.MyRegisterSerializer'
 }
+
 
 
 MIDDLEWARE = [
@@ -213,7 +214,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
-ACCOUNT_USERNAME_REQUIRED = True # new
+ACCOUNT_USERNAME_REQUIRED = False # new
 ACCOUNT_AUTHENTICATION_METHOD = "username_email" # new
 ACCOUNT_EMAIL_REQUIRED = True # new
 ACCOUNT_UNIQUE_EMAIL = True # new
