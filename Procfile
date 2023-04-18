@@ -1,1 +1,2 @@
-web: gunicorn g6api.wsgi --log-file -
+web: daphne g6api.asgi:application
+worker: python manage.py runworker -v2
