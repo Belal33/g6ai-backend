@@ -1,1 +1,1 @@
-web: daphne g6api.asgi:application
+web: gunicorn g6api.wsgi --log-file -
