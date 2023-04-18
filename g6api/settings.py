@@ -25,6 +25,7 @@ ALLOWED_HOSTS =  ["api.chatg6.ai",".chatg6.ai",".herokuapp.com", "localhost", "1
 
 INSTALLED_APPS = [
     "daphne",
+    "channels",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
