@@ -1,12 +1,12 @@
 
 from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
-from django.contrib.auth.models import AnonymousUser
 
 # database_sync_to_async: 
 #   It is used for retrieving the data from the database as Django ORM is totally synchronous.
 @database_sync_to_async
 def returnUser(token_string):
+    from django.contrib.auth.models import AnonymousUser
     from rest_framework.authtoken.models import Token
     try:
         user = Token.objects.get(key=token_string).user
