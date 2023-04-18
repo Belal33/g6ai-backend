@@ -309,7 +309,7 @@
     <script>
       let form = document.querySelector("form")
       let resdiv = document.querySelector(".response")
-      let url = `ws://${window.location.host}/ws/socket-chat/?token=cfd7ca38d1ba8565f346d65269844cc29aec18b5`
+      let url = `wss://${window.location.host}/ws/socket-chat/?token=cfd7ca38d1ba8565f346d65269844cc29aec18b5`
       // cfd7ca38d1ba8565f346d65269844cc29aec18b5
       const chatsocket= new WebSocket(url)
       let lastmessage = ""
