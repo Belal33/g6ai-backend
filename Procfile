@@ -1,2 +1,2 @@
 web: daphne g6api.asgi:application
-worker: python manage.py runworker -v2
+worker: python manage.py runserver -v2
