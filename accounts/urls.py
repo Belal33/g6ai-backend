@@ -67,11 +67,3 @@ urlpatterns =[
 # api/v1/auth/ registration/  [name='rest_register']
 # api/v1/auth/ registration/verify-email/  [name='rest_verify_email']
 # api/v1/auth/ registration/resend-email/  [name='rest_register']
-
-# https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:8000/api/v1/auth/google/login/callback/&prompt=consent&response_type=code&client_id=224651289675-ath8lj282d8lr125ln40gf7l0nlijcb2.apps.googleusercontent.com&scope=openid%20email%20profile&access_type=offline
-
-
-# http://localhost:8000/?code=4%2F0AVHEtk6ADWJYAO8tUvQLwnmW6nSmhj-SEXcNUK7oAkaf8hGOqcVJBkadmNVhtjNaqYU5Sg&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=consent
-
-
-# https://www.rootstrap.com/blog/registration-and-authentication-in-django-apps-with-dj-rest-auth

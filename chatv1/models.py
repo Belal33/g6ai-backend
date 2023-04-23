@@ -6,7 +6,7 @@ import uuid
 #   id = models.UUIDField( default=uuid.uuid4, unique=True ,primary_key=True,editable=False)
 #   user = models.ForeignKey(get_user_model(),on_delete=models.CASCADE)
 #   role = models.CharField(max_length=10,choices=(
-#       ("user", "assistant"),
+#       ("user", "user"),
 #       ("assistant", "assistant")
 #     )
 #   )

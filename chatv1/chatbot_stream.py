@@ -82,5 +82,3 @@ def get_gpt_chat_response(msgs,
             continue
 
 # e = get_gpt_chat_response([{"role": "user", "content": "hi"}])
-# for m in e:
-#     print(m)

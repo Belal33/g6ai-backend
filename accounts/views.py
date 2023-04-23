@@ -8,6 +8,4 @@ class GoogleLogin(SocialLoginView): # if you want to use Authorization Code Gran
     adapter_class = GoogleOAuth2Adapter
     callback_url = "http://localhost:8000/accounts/google/login/callback/"
     client_class = OAuth2Client
-
-
-# https://www.rootstrap.com/blog/how-to-integrate-google-login-in-your-django-rest-api-using-the-dj-rest-auth-library
+# https://medium.com/codex/google-sign-in-rest-api-with-python-social-auth-and-django-rest-framework-4d087cd6d47f

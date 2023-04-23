@@ -88,6 +88,7 @@ MIDDLEWARE = [
 # new
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:3000",
+    "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "https://g6ai-backend.herokuapp.com",
@@ -231,13 +232,18 @@ LOGIN_URL = 'https://g6ai-backend.herokuapp.com/api/v1/auth/login/'
 
 
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
+        'google': {
+            "APP": {
+            "client_id": env.str("GOOGLE_CLIENT_ID"),
+            "secret": env.str("GOOGLE_SECRET_KEY"),
+            "key": ""
+        },
         'SCOPE': [
             'profile',
             'email',
         ],
         'AUTH_PARAMS': {
-            'access_type': 'offline',
+            'access_type': 'online',
         },
         'OAUTH_PKCE_ENABLED': True,
     }
@@ -247,3 +253,7 @@ SOCIALACCOUNT_PROVIDERS = {
 if not DEBUG :
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
+
+
+
+# ya29.a0Ael9sCMTW1AVnX5N5bT0NKtPpO2CGOgBGDtdnGVFpw2UuWKhjYW02aFb4Z2z-NbUy-REDzEbvrHUV4d4FKYI4vT9v8RL5iqJpfBZFPm2Dt-yqUEGFdrjkWOtO3I9WZ0Yh7FZsOdIcogE7XSjYV9Wr8YOs1w2yQaCgYKAXQSARISFQF4udJhf4tGnSIIcskOaSsY8B6hVQ0165

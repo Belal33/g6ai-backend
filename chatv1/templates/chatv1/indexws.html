@@ -307,10 +307,16 @@
     <!-- end page -->
 
     <script>
+      let protocol = window.location.protocol
+      console.log(protocol)
+      let wsprotocol = protocol == "https"? "wss":"ws"
+      let token = "1159ae391831d3126b27463ac4edf70ab6e08400"
+      // 1159ae391831d3126b27463ac4edf70ab6e08400
+      // ac2744d6b40b908f7c14bf5b6165b6dfc7dd2680
       let form = document.querySelector("form")
       let resdiv = document.querySelector(".response")
-      let url = `wss://${window.location.host}/ws/socket-chat/?token=ac2744d6b40b908f7c14bf5b6165b6dfc7dd2680`
-      // cfd7ca38d1ba8565f346d65269844cc29aec18b5
+      // let url = `wss://www.chatg6.ai/ws/socket-chat/?token=${token}`
+      let url = `${wsprotocol}://${window.location.host}/ws/socket-chat/?token=${token}`
       const chatsocket= new WebSocket(url)
       let lastmessage = ""
 

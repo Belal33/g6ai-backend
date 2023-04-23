@@ -28,3 +28,4 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
           full_res += message
           self.send_json({"role": "assistant", "content": message})
       print(full_res)
+      self.close()
