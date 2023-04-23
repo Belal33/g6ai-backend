@@ -33,4 +33,3 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
         else:
           self.send_json({"role": "", "content": "","finish_reason":m["choices"][0]["finish_reason"]})
       print(full_res)
-      self.close()
