@@ -315,8 +315,8 @@
       // ac2744d6b40b908f7c14bf5b6165b6dfc7dd2680
       let form = document.querySelector("form")
       let resdiv = document.querySelector(".response")
-      // let url = `wss://www.chatg6.ai/ws/socket-chat/?token=${token}`
-      let url = `${wsprotocol}://${window.location.host}/ws/socket-chat/?token=${token}`
+      let url = `wss://www.chatg6.ai/ws/socket-chat/?token=${token}`
+      // let url = `${wsprotocol}://${window.location.host}/ws/socket-chat/?token=${token}`
       const chatsocket= new WebSocket(url)
       let lastmessage = ""
 
