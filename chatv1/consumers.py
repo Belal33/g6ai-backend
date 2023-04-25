@@ -1,17 +1,24 @@
 from channels.generic.websocket import JsonWebsocketConsumer
 from .chatbot_stream import get_gpt_chat_response
+from django.contrib.auth import get_user_model
+
+get_user_model().is_anonymous
+get_user_model().is_authenticated
 
 class TokenAuthConsumer(JsonWebsocketConsumer):
   
     def connect(self):
-      self.accept()
-      print(self.scope["user"].username)
+      user = self.scope.get("user")
+      if user and user.is_authenticated and not user.is_anonymous:
+        self.accept()
+      elif user.is_anonymous :
+        self.close(code=400)
+      else: 
+        self.close(code=401)
       
-      print(self.scope["user"])
-      # print(self.scope["user"].email)
 
-    def disconnect(self, close_code):
-        ...
+    # def disconnect(self, close_code):
+    #     ...
 
     def receive_json(self, message):
       full_res =''

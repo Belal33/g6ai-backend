@@ -2,14 +2,15 @@ from rest_framework import serializers
 from .models import ChatBox,ChatMessage
 
 class ChatBoxSerializer(serializers.ModelSerializer):
-  
+  name = serializers.CharField(max_length=20,min_length=3,trim_whitespace=True)
+  sys_message = serializers.CharField(max_length=1000,trim_whitespace=True,allow_blank=True)
   class Meta:
     model=ChatBox
     fields = (
       "id",
       "name",
       "temperature",
-      "sys_messages",
+      "sys_message",
       "created_at",
     )
 

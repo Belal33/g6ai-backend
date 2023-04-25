@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 import uuid
@@ -18,7 +17,7 @@ class ChatBox(models.Model):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4,editable=False, unique=True)
   user = models.ForeignKey(get_user_model(),on_delete=models.CASCADE,related_name='chatboxes')
   #  if ModelA has a field like: model_b = ForeignKeyField(ModelB, related_name='model_as'), this would enable you to access the ModelA instances that are related to your ModelB instance by going model_b_instance.model_as.all().
-  name = models.CharField(max_length=40)
+  name = models.CharField(max_length=20)
   temperature = models.DecimalField(
     default=1,
     max_digits=2,
@@ -30,10 +29,7 @@ class ChatBox(models.Model):
   )
   # https://docs.djangoproject.com/en/4.0/ref/contrib/postgres/fields/#querying-arrayfield
 
-  sys_messages = ArrayField(
-    models.TextField(),
-    size=5,blank=True
-  )
+  sys_message = models.CharField(max_length=1000,default='',blank=True)
   created_at = models.DateTimeField(auto_now_add=True,editable=False)
 
   def __str__(self):
