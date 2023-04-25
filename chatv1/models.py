@@ -15,7 +15,7 @@ import uuid
 
 
 class ChatBox(models.Model):
-  id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4,editable=False, unique=True)
   user = models.ForeignKey(get_user_model(),on_delete=models.CASCADE,related_name='chatboxes')
   #  if ModelA has a field like: model_b = ForeignKeyField(ModelB, related_name='model_as'), this would enable you to access the ModelA instances that are related to your ModelB instance by going model_b_instance.model_as.all().
   name = models.CharField(max_length=40)
