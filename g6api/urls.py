@@ -7,9 +7,10 @@ admin.site.site_title = 'G6AI admin' # default: "Django site admin"
 
 urlpatterns = [
     
-    path('api/v1/auth/', include("accounts.urls")),
-    path('', include('chatv1.urls')),
     path('admin/', admin.site.urls),
+    path('api/v1/auth/', include("accounts.urls")),
+    path('api/v1/chat/', include('chatv1.urls')),
+    
     # path('accounts/', include('allauth.urls')),
     # http://localhost:8000/accounts/google/login/callback/
 ]

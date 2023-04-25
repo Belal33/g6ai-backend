@@ -20,7 +20,6 @@ DEBUG = env.bool("DEBUG", default=False)
 
 ALLOWED_HOSTS =  ["api.chatg6.ai",".chatg6.ai",".herokuapp.com", "localhost", "127.0.0.1"] 
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -215,6 +214,8 @@ STATICFILES_STORAGE ="whitenoise.storage.CompressedManifestStaticFilesStorage" #
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "accounts.CustomUser"
+
+OLD_PASSWORD_FIELD_ENABLED = True
 
 ACCOUNT_USERNAME_REQUIRED = False # new
 ACCOUNT_AUTHENTICATION_METHOD = "username_email" # new

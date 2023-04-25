@@ -1,51 +1,42 @@
-from django.shortcuts import render
-from .chatbot1 import GPT_simplified
-from django.http.response import JsonResponse
-from rest_framework.views import Response 
-from rest_framework.decorators import api_view ,permission_classes
-from rest_framework.permissions import AllowAny
-from rest_framework.generics import ListCreateAPIView  
-# from rest_framework.pagination import   
+from rest_framework.generics import ListCreateAPIView,RetrieveDestroyAPIView
+from rest_framework.permissions import IsAuthenticated
+
+from .serializers import ChatBoxSerializer,ChatMessageSerializer
+from .models import ChatBox ,ChatMessage
+from .Paginations import CustomPagination
+
+class ChatBoxListCreateView(ListCreateAPIView):
+    serializer_class=ChatBoxSerializer
+    permission_classes = [IsAuthenticated,]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        queryset = ChatBox.objects.filter(user=self.request.user)
+        return queryset
 
 
+class ChatBoxRetrieveDestroyView(RetrieveDestroyAPIView):
+    serializer_class=ChatBoxSerializer
+    permission_classes = [IsAuthenticated,]
 
+    def get_queryset(self):
+        queryset = ChatBox.objects.filter(user=self.request.user)
+        return queryset
 
-
-
-@api_view(["POST"])
-@permission_classes([AllowAny,])
-def chat_view(request):
-
-    print('#'*20)
-    print(dir(request))
-    print(type(request.data))
-    print((request.data))
-    print('#'*20)
-
-    user_message = request.data["message"] or ''#insert_user_message_here
-    try:
-        old_messges =  request.data["old_messges"] or None #insert_user_message_here
-        print(old_messges)
-    except:
-        old_messges = None #insert_user_message_here
-
-    print("#"*50,user_message)
-    # user_message = 'hi'#insert_user_message_here
-    chat = GPT_simplified()
-    response = {"messages":'something wrong happend'}
+class ChatMessageListCreateView(ListCreateAPIView):
+    serializer_class=ChatMessageSerializer
+    pagination_class = CustomPagination
     
-    for i in range(3):
-        try:
-            response = chat.new_user_message(user_message,old_messges)
-        except Exception as e:
-            if i == 2:
-                raise Exception(e)
-            continue
-        else:
-            # print("error from module")
-            break
-    return Response(response,status=200)
-
-
-class Chating(ListCreateAPIView):
-    pass
+    def perform_create(self, serializer):
+        chatbox_id = self.kwargs['chatbox_id']
+        chatbox=ChatBox.objects.get(id=chatbox_id)
+        # Autofill FK user.
+        serializer.save(user=self.request.user,chatbox=chatbox)
+    
+    def get_queryset(self):
+        user = self.request.user
+        chatbox_id = self.kwargs['chatbox_id']
+        queryset = ChatMessage.objects.filter(user=user, chatbox_id=chatbox_id)
+        return queryset

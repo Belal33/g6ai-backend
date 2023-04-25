@@ -18,7 +18,7 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
       # e = get_gpt_chat_response([{"role": "user", "content": "hi"}])
       content = message.get("content")
       print(content)
-      for m in get_gpt_chat_response([{"role": "user", "content": content}]):
+      for m in get_gpt_chat_response([{"role": "user", "content": content}],"55"):
         print("*"*10)
         print(m["choices"][0]["delta"])
         print(m["choices"][0]["finish_reason"])
