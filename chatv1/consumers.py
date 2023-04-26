@@ -1,6 +1,6 @@
 from channels.generic.websocket import JsonWebsocketConsumer
 from .chatbot_stream import get_gpt_chat_response
-from .models import ChatMessage ,ChatBox
+
 from channels.db import database_sync_to_async
 
 class TokenAuthConsumer(JsonWebsocketConsumer):
@@ -41,6 +41,7 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
 
 
     def receive_json(self, message):
+      from .models import ChatMessage ,ChatBox
       user = self.scope["user"]
       full_res = ''
       content = message.get("content")
