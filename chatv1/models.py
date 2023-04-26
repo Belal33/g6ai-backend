@@ -34,9 +34,9 @@ class ChatBox(models.Model):
 
   def __str__(self):
     
-    return f"{str(self.name)} chatbox[{self.user.get_username()}]"
-
+    return str(self.name)
   class Meta:
+    unique_together = ['user', 'name']
     ordering = ['-created_at']
 
 # message:
@@ -59,19 +59,19 @@ class ChatMessage(models.Model):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False,unique=True)
   user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='chatmessages')
   chatbox = models.ForeignKey(ChatBox,on_delete=models.CASCADE,related_name='messages')
-  user_msg = models.TextField("user message content")
+  user_msg = models.TextField("user message content",blank=True)
   assistant_msg = models.TextField("assistant message content")
   n_prompt_messages = models.IntegerField("prompt messages length",default=0)
   prompt_tokens = models.IntegerField("prompt messages tokens",default=0)
   user_msg_tokens = models.IntegerField("user message tokens",default=0)
   assistant_msg_tokens = models.IntegerField("assistant message tokens",default=0)
-  finish_reason = models.CharField(max_length=10,null=True,blank=True)
+  finish_reason = models.CharField(max_length=10,null=True)
   voice_message = models.BooleanField(default=False)
   created_at = models.DateTimeField(auto_now_add=True)
   used_credits = models.IntegerField(default=0)
   
   def __str__(self):
-    return self.user.get_username() + " message | " + str(self.pk)  
+    return self.user.get_username() + " | Message | " + str(self.pk)  
 
 
   class Meta:

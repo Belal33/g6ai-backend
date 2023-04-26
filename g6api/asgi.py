@@ -14,7 +14,7 @@ from django.urls import path
 
 from channels.routing import ProtocolTypeRouter,URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
-# from channels.auth import AuthMiddlewareStack <= # need to test it
+from channels.auth import AuthMiddlewareStack  # <= need to test it
 
 from chatv1.consumers import TokenAuthConsumer
 from chatv1.middlewares import TokenAuthMiddleWare
@@ -24,12 +24,14 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'g6api.settings')
 application = ProtocolTypeRouter({
   
     "http": get_asgi_application(),
-    "websocket": TokenAuthMiddleWare(
-      AllowedHostsOriginValidator(
-          URLRouter(
-          [path("ws/socket-chat/", TokenAuthConsumer.as_asgi())]
-          )
-      )
-    )
+    "websocket": AuthMiddlewareStack(
+                  TokenAuthMiddleWare(
+                    AllowedHostsOriginValidator(
+                        URLRouter(
+                        [path("ws/socket-chat/", TokenAuthConsumer.as_asgi())]
+                        )
+                    )
+                  )
+                )
 
 })

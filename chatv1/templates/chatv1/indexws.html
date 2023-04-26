@@ -310,12 +310,13 @@
       let protocol = window.location.protocol
       console.log(protocol)
       let wsprotocol = protocol == "https"? "wss":"ws"
-      let token = "1159ae391831d3126b27463ac4edf70ab6e08400"
-      // 1159ae391831d3126b27463ac4edf70ab6e08400
-      // ac2744d6b40b908f7c14bf5b6165b6dfc7dd2680
+      
       let form = document.querySelector("form")
       let resdiv = document.querySelector(".response")
-      let url = `wss://www.chatg6.ai/ws/socket-chat/?token=${token}`
+      let token = "ac2744d6b40b908f7c14bf5b6165b6dfc7dd2680"// chatg6
+      let url = `wss://www.chatg6.ai/ws/socket-chat/?token=${token}`// 
+    
+      // let token = "12efe8bf7e5ce5a8380c9f525f0e3c9d2b0a92fa" // local
       // let url = `${wsprotocol}://${window.location.host}/ws/socket-chat/?token=${token}`
       const chatsocket= new WebSocket(url)
       let lastmessage = ""

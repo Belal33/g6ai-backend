@@ -5,5 +5,6 @@ import uuid
 
 class CustomUser(AbstractUser):
   id = models.UUIDField( default=uuid.uuid4, unique=True ,primary_key=True,editable=False)
-
   age = models.IntegerField(blank=True,null=True)
+  user_credits = models.IntegerField(default=0)
+

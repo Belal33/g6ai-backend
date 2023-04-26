@@ -28,6 +28,7 @@ class ChatBoxRetrieveDestroyView(RetrieveDestroyAPIView):
 class ChatMessageListCreateView(ListCreateAPIView):
     serializer_class=ChatMessageSerializer
     pagination_class = CustomPagination
+    permission_classes = [IsAuthenticated,]
     
     def perform_create(self, serializer):
         chatbox_id = self.kwargs['chatbox_id']

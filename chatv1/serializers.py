@@ -4,15 +4,41 @@ from .models import ChatBox,ChatMessage
 class ChatBoxSerializer(serializers.ModelSerializer):
   name = serializers.CharField(max_length=20,min_length=3,trim_whitespace=True)
   sys_message = serializers.CharField(max_length=1000,trim_whitespace=True,allow_blank=True)
+  user_name = serializers.SerializerMethodField()
+  
   class Meta:
     model=ChatBox
     fields = (
       "id",
       "name",
+      "user_name",
       "temperature",
       "sys_message",
       "created_at",
     )
+
+  def get_user_name(self, obj):
+    return obj.user.username
+
+  def validate_name(self, value):
+    user = self.context['request'].user
+    existing_chatbox = ChatBox.objects.filter(user=user, name=value).first()
+    if existing_chatbox:
+      raise serializers.ValidationError("A chatbox with this name already exists for this user.")
+    return value
+  
+  def validate(self, data):
+    user = self.context['request'].user
+    max_chatboxes = 10 # Set the maximum number of chatboxes per user
+    num_chatboxes = ChatBox.objects.filter(user=user).count()
+    if num_chatboxes >= max_chatboxes:
+        raise serializers.ValidationError(f"Maximum {max_chatboxes} chatboxes allowed per user.")
+    return data
+
+  # def create(self, validated_data):
+  #   user = self.context['request'].user
+  #   chatbox = ChatBox.objects.create(user=user, **validated_data)
+  #   return chatbox
 
 
 class ChatMessageSerializer(serializers.ModelSerializer):
