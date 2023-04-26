@@ -1,7 +1,7 @@
 from channels.generic.websocket import JsonWebsocketConsumer
 from .chatbot_stream import get_gpt_chat_response
 from .models import ChatMessage ,ChatBox
-
+from channels.db import database_sync_to_async
 
 class TokenAuthConsumer(JsonWebsocketConsumer):
   
@@ -63,6 +63,7 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
       print(full_res)
       
       chat_message.assistant_msg = full_res
-      chat_message.save()
+      database_sync_to_async(chat_message.save)()
+      
       # Save the chat message to the database
       
