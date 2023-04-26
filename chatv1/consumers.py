@@ -64,7 +64,7 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
       print(full_res)
       
       chat_message.assistant_msg = full_res
-      database_sync_to_async(chat_message.save)()
+      chat_message.save()
       
       # Save the chat message to the database
       
