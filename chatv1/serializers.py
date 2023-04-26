@@ -4,7 +4,7 @@ from .chatbot_stream import gpt3_tokens_calc
 
 class ChatBoxSerializer(serializers.ModelSerializer):
   name = serializers.CharField(max_length=20,min_length=3,trim_whitespace=True)
-  sys_message = serializers.CharField(max_length=1000,required=False,trim_whitespace=True,allow_blank=True)
+  sys_message = serializers.CharField(required=False,trim_whitespace=True,allow_blank=True)
   user_name = serializers.SerializerMethodField()
   
   class Meta:
