@@ -29,16 +29,25 @@ def gpt3_tokens_calc(argument, chat=False, encoding=tiktoken.get_encoding("cl100
         return len(tokens)
 
 
-def prepare_msgs(msgs):  # sourcery skip: merge-nested-ifs, switch
+def prepare_msgs(msgs:list[list[str]]):  # sourcery skip: merge-nested-ifs, switch
+    """
+    returned data
+    
+    {
+        "messages": messages,
+        "prompt_tokens": prompt_tokens,
+        "n_prompt_messages": n_prompt_messages,
+    }
+    """
     max_prompt_tokens = 500
     prompt_tokens = 0
     chat_msg_returned = False
     messages = []
     for role, msg in msgs:
         if role == "system":
-            if gpt3_tokens_calc(msg) > 100:
-                raise Exception(
-                    f"system messages can't contain more than 100 tokens\ncurrent message contain {gpt3_tokens_calc(msg)} tokens")
+            # if gpt3_tokens_calc(msg) > 100:
+            #     raise Exception(
+            #         f"system messages can't contain more than 100 tokens\ncurrent message contain {gpt3_tokens_calc(msg)} tokens")
             messages.append({"role": role, "content": msg})
     q = len(messages)
     for role, msg in msgs:

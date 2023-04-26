@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from .models import ChatBox,ChatMessage
+from .chatbot_stream import gpt3_tokens_calc
 
 class ChatBoxSerializer(serializers.ModelSerializer):
   name = serializers.CharField(max_length=20,min_length=3,trim_whitespace=True)
-  sys_message = serializers.CharField(max_length=1000,trim_whitespace=True,allow_blank=True)
+  sys_message = serializers.CharField(max_length=1000,required=False,trim_whitespace=True,allow_blank=True)
   user_name = serializers.SerializerMethodField()
   
   class Meta:
@@ -25,6 +26,13 @@ class ChatBoxSerializer(serializers.ModelSerializer):
     existing_chatbox = ChatBox.objects.filter(user=user, name=value).first()
     if existing_chatbox:
       raise serializers.ValidationError("A chatbox with this name already exists for this user.")
+    return value
+  
+  def validate_sys_message(self, value):
+    msg_tokens=gpt3_tokens_calc(str(value))
+    if msg_tokens >100:
+      raise serializers.ValidationError(
+                    f"system messages can't contain more than 100 tokens\ncurrent message contain {msg_tokens} tokens")
     return value
   
   def validate(self, data):
