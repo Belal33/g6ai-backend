@@ -29,7 +29,7 @@ class ChatBox(models.Model):
   )
   # https://docs.djangoproject.com/en/4.0/ref/contrib/postgres/fields/#querying-arrayfield
 
-  sys_message = models.CharField(max_length=1000,default='',blank=True)
+  sys_message = models.CharField(max_length=10000,default='',blank=True)
   created_at = models.DateTimeField(auto_now_add=True,editable=False)
 
   def __str__(self):

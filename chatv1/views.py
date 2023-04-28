@@ -1,4 +1,4 @@
-from rest_framework.generics import ListCreateAPIView,RetrieveDestroyAPIView
+from rest_framework.generics import ListCreateAPIView,RetrieveDestroyAPIView,ListAPIView
 from rest_framework.permissions import IsAuthenticated
 
 from .serializers import ChatBoxSerializer,ChatMessageSerializer
@@ -25,7 +25,7 @@ class ChatBoxRetrieveDestroyView(RetrieveDestroyAPIView):
         queryset = ChatBox.objects.filter(user=self.request.user)
         return queryset
 
-class ChatMessageListCreateView(ListCreateAPIView):
+class ChatMessageListCreateView(ListAPIView):
     serializer_class=ChatMessageSerializer
     pagination_class = CustomPagination
     permission_classes = [IsAuthenticated,]

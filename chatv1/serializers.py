@@ -51,7 +51,7 @@ class ChatBoxSerializer(serializers.ModelSerializer):
 
 class ChatMessageSerializer(serializers.ModelSerializer):
 
-  chatbox = serializers.PrimaryKeyRelatedField(read_only=True)
+  chatbox_name = serializers.SerializerMethodField()
   
   def validate_chatbox(self, value):
     request = self.context['request']
@@ -59,11 +59,14 @@ class ChatMessageSerializer(serializers.ModelSerializer):
         raise serializers.ValidationError("Invalid chatbox for that user")
     return value
   
+  def get_chatbox_name(self, obj):
+    return obj.chatbox.name
+  
   class Meta:
     model=ChatMessage
     fields = (
       "id",
-      "chatbox",
+      "chatbox_name",
       "user_msg",
       "assistant_msg",
       "n_prompt_messages",
