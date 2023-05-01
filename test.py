@@ -1,7 +1,14 @@
-a=1
-b=2
+import requests
+from os import stat
+url = 'http://127.0.0.1:8000/api/v1/chat/voice/'
+file_path = 'requirements.txt'
 
-arr_arr = [["role","msg"],['a',"b"],["role","msg"],["role","msg"],]
+size = stat(file_path).st_size
+# with open(file_path, 'rb') as f:
+#     files = {'file': f}
+#     headers = {'Content-Disposition': 'attachment; filename="{}"'.format(file_path)}
+#     response = requests.post(url, files=files,headers=headers)
 
-for [e1,e2] in arr_arr:
-  print(e1,e2)
+# print(response.content)
+print(size)
+# print(response.content)

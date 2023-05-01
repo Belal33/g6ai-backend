@@ -1,6 +1,7 @@
 import openai
 import tiktoken
 from environs import Env # new
+from os import stat
 
 env = Env() # new
 env.read_env() # new
@@ -100,9 +101,11 @@ def get_gpt_chat_response(
 
 
 def transcripe(path):
+    size = stat(path).st_size
+    duration = size / 128_000 * 8
     audio_file = open(path, "rb")
     res = openai.Audio.transcribe("whisper-1", audio_file)
-    return res.text
+    return {"text": res.text, "duration": round(duration)}
 
 
 

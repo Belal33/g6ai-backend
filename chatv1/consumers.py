@@ -17,27 +17,6 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
         print("notaccept")
         self.close(code=401)
 
-      
-
-    # def disconnect(self, close_code):
-    #     ...
-
-    # def receive_json(self, message):
-    #   full_res =''
-    #   # e = get_gpt_chat_response([{"role": "user", "content": "hi"}])
-    #   content = message.get("content")
-    #   print(content)
-    #   for m in get_gpt_chat_response([{"role": "user", "content": content}],"55"):
-
-    #     delta = m["choices"][0]["delta"]
-    #     message = delta.get("content")
-
-    #     if message :      
-    #       full_res += message
-    #       self.send_json({"role": "assistant", "content": message,"finish_reason":m["choices"][0]["finish_reason"]})
-    #     else:
-    #       self.send_json({"role": "", "content": "","finish_reason":m["choices"][0]["finish_reason"]})
-    #   print(full_res)
 
 
     def receive_json(self, res):
