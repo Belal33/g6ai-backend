@@ -21,11 +21,12 @@ from .models import ChatBox, ChatMessage
 from .Paginations import CustomPagination
 
 
-# @parser_classes([FileUploadParser])
 @api_view(["POST"])
 @permission_classes([AllowAny])
-def file_upload_view(request, format="webm"):
+@parser_classes([FileUploadParser])
+def file_upload_view(request, format_file="webm"):
     file = request.data.get("file", None)
+    print(dir(file))
     if not file:
         return Response(
             {"error": "Please provide a file"},
@@ -33,12 +34,12 @@ def file_upload_view(request, format="webm"):
         )
 
     # Check the file format
-    valid_formats = ["webm"]
+    valid_formats = [format_file]
     file_ext = file.name.split(".")[-1]
     if file_ext not in valid_formats:
         return Response(
             {
-                "error": f"Invalid file file format. Valid formats are {', '.join(valid_formats)}."
+                "error": f"Invalid file file format{file_ext}. Valid formats are {', '.join(valid_formats)}."
             },
             status=status.HTTP_400_BAD_REQUEST,
         )
@@ -46,7 +47,8 @@ def file_upload_view(request, format="webm"):
     for i in range(5):
         try:
             # Estimate the size of the file
-            res = openai.Audio.transcribe("whisper-1", file)
+            with open(file.name, "rb") as f:
+                res = openai.Audio.transcribe("whisper-1", f)
             size = file.size
             duration = size / 128_000 * 8
             break
@@ -122,22 +124,25 @@ class FileUploadSerializer(serializers.Serializer):
 
 class FileUploadView(CreateAPIView):
     permission_classes = [AllowAny]
-    parser_classes = [MultiPartParser]
+    # parser_classes = [MultiPartParser]
     serializer_class = FileUploadSerializer
 
     def post(self, request):
         print(dict(request.data))
-        file_serializer = FileUploadSerializer(data=request.data)
+        file = request.data.get("file", None)
+        file_serializer = FileUploadSerializer(data={"file": file})
 
         if file_serializer.is_valid():
             file = file_serializer.validated_data.get("file", None)
-            print(dir(file))
-            print(file.content_type)
+            # print(dir(file))
+            print(file.name)
             for i in range(5):
                 try:
                     # Estimate the size of the file
                     print("file: ", file)
-                    res = openai.Audio.transcribe("whisper-1", file)
+
+                    with open(file.name, "rb") as f:
+                        res = openai.Audio.transcribe("whisper-1", f)
                     print(res.text)
                     size = file.size
                     duration = size / 128_000 * 8
