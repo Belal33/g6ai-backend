@@ -1,20 +1,19 @@
 from channels.generic.websocket import JsonWebsocketConsumer
 from .chatbot_stream import get_gpt_chat_response,prepare_msgs,gpt3_tokens_calc
 
-from channels.db import database_sync_to_async
 
 class TokenAuthConsumer(JsonWebsocketConsumer):
   
     def connect(self):
       user = self.scope.get("user")
+      
       if user and user.is_authenticated and not user.is_anonymous:
-        print("accept")
         self.accept()
+        
       elif user.is_anonymous :
-        print("notaccept")
         self.close(code=401)
+        
       else: 
-        print("notaccept")
         self.close(code=401)
 
 
@@ -102,9 +101,9 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
           chat_message.assistant_msg_tokens = int(gpt3_tokens_calc(assistant_msg))
           ######### generator response #########
         # if response error
-        except:
+        except Exception as e:
           chat_message.finish_reason = "openai.error"
-          self.send_json({"error": "openai.error"})
+          self.send_json({"error": "openai.error","content":str(e)})
           chat_message.used_credits = 0
           
         chat_message.save()

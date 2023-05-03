@@ -1,17 +1,23 @@
-from rest_framework.generics import CreateAPIView,ListCreateAPIView,RetrieveDestroyAPIView,ListAPIView
+from rest_framework.generics import (
+    CreateAPIView,
+    ListCreateAPIView,
+    RetrieveDestroyAPIView,
+    ListAPIView
+)
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser,FileUploadParser
 from rest_framework.response import Response
+from rest_framework import serializers
 from rest_framework import status
+
+import openai
 
 from .serializers import ChatBoxSerializer,ChatMessageSerializer
 from .models import ChatBox ,ChatMessage
 from .Paginations import CustomPagination
 
-from rest_framework import serializers
 
-import openai
 
 
 class ApiUploadFile(APIView):
@@ -20,7 +26,10 @@ class ApiUploadFile(APIView):
     def post(self, request, format="webm"):
         file_obj = request.data.get('file', None)
         if not file_obj:
-            return Response({'error': 'Please provide a file'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'error': 'Please provide a file'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         print(file_obj.name)
         print(file_obj.file)
         # Perform any additional validation on the file here
@@ -29,10 +38,16 @@ class ApiUploadFile(APIView):
             # Estimate the size of the file
             file_size = len(file_obj.read())
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {'error': str(e)}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
         # Return the estimated file size
-        return Response({'file_size': file_size}, status=status.HTTP_200_OK)
+        return Response(
+            {'file_size': file_size},
+            status=status.HTTP_200_OK
+        )
 
 class FileUploadSerializer(serializers.Serializer):
     file = serializers.FileField()
@@ -55,20 +70,35 @@ class FileUploadView(CreateAPIView):
         if file_serializer.is_valid() :
             file = file_serializer.validated_data.get("file",None)
             print(file)
-            try:
-            # Estimate the size of the file
-                res = openai.Audio.transcribe("whisper-1", file)
-                print(res.text)
-                size = file.size
-                duration = size / 128_000 * 8
-                
-            except Exception as e:
-                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            for i in range(5):
+                try:
+                # Estimate the size of the file
+                    res = openai.Audio.transcribe("whisper-1", file)
+                    print(res.text)
+                    size = file.size
+                    duration = size / 128_000 * 8
+                    break
+                except Exception as e:
+                    if i == 4:
+                        return Response(
+                            {'error': str(e)}, 
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                        )
             
             
-            return Response({"content":res.text,"size":size,"duration":round(duration)},status=status.HTTP_202_ACCEPTED)
+            return Response(
+                {
+                    "content":res.text,
+                    "size":size,
+                    "duration":round(duration),
+                },
+                status=status.HTTP_202_ACCEPTED
+                )
         
-        return Response({"error":"something wrong"},status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"error":"something wrong"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
         
 
 

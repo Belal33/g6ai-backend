@@ -100,7 +100,7 @@ def get_gpt_chat_response(
             continue
 
 
-def transcripe(path):
+def transcripe(path:str):
     size = stat(path).st_size
     duration = size / 128_000 * 8
     audio_file = open(path, "rb")
