@@ -146,8 +146,8 @@ class FileUploadView(CreateAPIView):
                 try:
                     # Estimate the size of the file
                     # print("file: ", file)
-
-                    res = openai.Audio.transcribe("whisper-1", file)
+                    f = file.read()
+                    res = openai.Audio.transcribe("whisper-1", f)
                     print(res.text)
                     size = file.size
                     duration = size / 128_000 * 8
