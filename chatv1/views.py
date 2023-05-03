@@ -46,10 +46,10 @@ def file_upload_view(request, format_file="webm"):
 
     for i in range(5):
         try:
+            size = file.size
             # Estimate the size of the file
             with open(file.name, "rb") as f:
                 res = openai.Audio.transcribe("whisper-1", f)
-            size = file.size
             duration = size / 128_000 * 8
             break
         except Exception as e:
@@ -124,12 +124,12 @@ class FileUploadSerializer(serializers.Serializer):
 
 class FileUploadView(CreateAPIView):
     permission_classes = [AllowAny]
-    # parser_classes = [MultiPartParser]
+    parser_classes = [FileUploadParser]
     serializer_class = FileUploadSerializer
 
     def post(self, request):
         print(dict(request.data))
-        file = request.data.get("file", None)
+        file = request.FILES.get("file", None)
         file_serializer = FileUploadSerializer(data={"file": file})
 
         if file_serializer.is_valid():
@@ -139,7 +139,7 @@ class FileUploadView(CreateAPIView):
             for i in range(5):
                 try:
                     # Estimate the size of the file
-                    print("file: ", file)
+                    # print("file: ", file)
 
                     with open(file.name, "rb") as f:
                         res = openai.Audio.transcribe("whisper-1", f)
