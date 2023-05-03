@@ -129,7 +129,7 @@ class FileUploadSerializer(serializers.Serializer):
 @method_decorator(csrf_exempt, name="dispatch")
 class FileUploadView(CreateAPIView):
     permission_classes = [AllowAny]
-    parser_classes = [FileUploadParser]
+    parser_classes = [MultiPartParser]
     serializer_class = FileUploadSerializer
 
     def post(self, request):
