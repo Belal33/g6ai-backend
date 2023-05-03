@@ -36,7 +36,7 @@ class ApiUploadFile(APIView):
 
         try:
             # Estimate the size of the file
-            file_size = len(file_obj.read())
+            file_size = file_obj.size
         except Exception as e:
             return Response(
                 {'error': str(e)}, 
@@ -50,7 +50,7 @@ class ApiUploadFile(APIView):
         )
 
 class FileUploadSerializer(serializers.Serializer):
-    file = serializers.FileField()
+    file = serializers.FileField(allow_empty_file=False,required =True)
 
     def validated_file(self,value):
         max_size = 5242
@@ -69,7 +69,7 @@ class FileUploadView(CreateAPIView):
         
         if file_serializer.is_valid() :
             file = file_serializer.validated_data.get("file",None)
-            print(file)
+            print(dir(file))
             for i in range(5):
                 try:
                 # Estimate the size of the file
@@ -96,7 +96,9 @@ class FileUploadView(CreateAPIView):
                 )
         
         return Response(
-            {"error":"something wrong"},
+            # {"error":"something wrong"}
+            dict(file_serializer.errors),
+            
             status=status.HTTP_400_BAD_REQUEST
         )
         

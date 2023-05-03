@@ -2,3 +2,5 @@
 .env
 __pycache__/
 db.sqlite3
+AI_Modules_hameed.webm
+test.py

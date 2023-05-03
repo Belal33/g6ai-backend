@@ -17,6 +17,6 @@ urlpatterns = [
     path("messages/<chatbox_id>/",ChatMessageListCreateView.as_view()),
     path("chatboxes/<pk>/",ChatBoxRetrieveDestroyView.as_view()),
     path("voice/",FileUploadView.as_view()),
-    # path("file/",ApiUploadFile.as_view()),
+    path("file/",ApiUploadFile.as_view()),
     path("chatboxes/",ChatBoxListCreateView.as_view()),
 ]
