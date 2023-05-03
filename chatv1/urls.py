@@ -1,6 +1,7 @@
 from django.urls import path, include
 from django.views.generic import TemplateView
 from .views import (
+    file_upload_view,
     FileUploadView,
     ApiUploadFile,
     ChatBoxListCreateView,
@@ -31,6 +32,7 @@ urlpatterns = [
     path("messages/<chatbox_id>/", ChatMessageListCreateView.as_view()),
     path("chatboxes/<pk>/", ChatBoxRetrieveDestroyView.as_view()),
     path("voice/", FileUploadView.as_view()),
-    path("file/", ApiUploadFile.as_view()),
+    # path("file/", ApiUploadFile.as_view()),
+    path("file/", file_upload_view),
     path("chatboxes/", ChatBoxListCreateView.as_view()),
 ]

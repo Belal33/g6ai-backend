@@ -11,14 +11,60 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 
+from rest_framework.decorators import api_view, parser_classes, permission_classes
+
 import openai
 
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 
 from .serializers import ChatBoxSerializer, ChatMessageSerializer
 from .models import ChatBox, ChatMessage
 from .Paginations import CustomPagination
+
+
+# @parser_classes([FileUploadParser])
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def file_upload_view(request, format="webm"):
+    file = request.data.get("file", None)
+    if not file:
+        return Response(
+            {"error": "Please provide a file"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    # Check the file format
+    valid_formats = ["webm"]
+    file_ext = file.name.split(".")[-1]
+    if file_ext not in valid_formats:
+        return Response(
+            {
+                "error": f"Invalid file file format. Valid formats are {', '.join(valid_formats)}."
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    for i in range(5):
+        try:
+            # Estimate the size of the file
+            res = openai.Audio.transcribe("whisper-1", file)
+            size = file.size
+            duration = size / 128_000 * 8
+            break
+        except Exception as e:
+            if i == 4:
+                return Response(
+                    {"error": str(e)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+
+    return Response(
+        {
+            "content": res.text,
+            "size": size,
+            "duration": round(duration),
+        },
+        status=status.HTTP_202_ACCEPTED,
+    )
 
 
 class ApiUploadFile(APIView):
@@ -26,25 +72,41 @@ class ApiUploadFile(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request, format="webm"):
-        file_obj = request.data.get("file", None)
-        if not file_obj:
+        file = request.data.get("file", None)
+        if not file:
             return Response(
                 {"error": "Please provide a file"}, status=status.HTTP_400_BAD_REQUEST
             )
-        print(file_obj.name)
-        print(file_obj.file)
+        print(file.name)
+        print(file.file)
         # Perform any additional validation on the file here
 
-        try:
-            # Estimate the size of the file
-            file_size = file_obj.size
-        except Exception as e:
-            return Response(
-                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+        for i in range(5):
+            try:
+                # Estimate the size of the file
+                print("file: ", file)
+                res = openai.Audio.transcribe("whisper-1", file)
+                print(res.text)
+                size = file.size
+                duration = size / 128_000 * 8
+                break
+            except Exception as e:
+                if i == 4:
+                    return Response(
+                        {"error": str(e)},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    )
 
-        # Return the estimated file size
-        return Response({"file_size": file_size}, status=status.HTTP_200_OK)
+        return Response(
+            {
+                "content": res.text,
+                "size": size,
+                "duration": round(duration),
+            },
+            status=status.HTTP_202_ACCEPTED,
+        )
+        # # Return the estimated file size
+        # return Response({"file_size": file_size}, status=status.HTTP_200_OK)
 
 
 class FileUploadSerializer(serializers.Serializer):
@@ -58,21 +120,23 @@ class FileUploadSerializer(serializers.Serializer):
         return value
 
 
-@method_decorator(csrf_exempt, name="dispatch")
 class FileUploadView(CreateAPIView):
     permission_classes = [AllowAny]
     parser_classes = [MultiPartParser]
     serializer_class = FileUploadSerializer
 
     def post(self, request):
+        print(dict(request.data))
         file_serializer = FileUploadSerializer(data=request.data)
 
         if file_serializer.is_valid():
             file = file_serializer.validated_data.get("file", None)
             print(dir(file))
+            print(file.content_type)
             for i in range(5):
                 try:
                     # Estimate the size of the file
+                    print("file: ", file)
                     res = openai.Audio.transcribe("whisper-1", file)
                     print(res.text)
                     size = file.size
