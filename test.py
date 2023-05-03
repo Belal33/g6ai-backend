@@ -7,18 +7,14 @@ size = stat(file_path).st_size
 with open(file_path, 'rb') as f:
     # files = {'file': f}
     # headers = {'Content-Disposition': 'attachment; filename="{}"'.format(file_path)}
-    
-    data = {"file": f}
-    headers = {
-      "Content-Type": "multipart/form-data",
-      'Content-Disposition': 'attachment; filename="{}"'.format(file_path)
-    }
-
-    response = requests.post(url, data=data,headers=headers)
     # response = requests.post(url, files=files,headers=headers)
+    
+    response = requests.post(url, files={"file": f})
+
 
 print(response.status_code)
 print(response.content)
+print(response.json())
 
 print(size)
 # print(response.content)

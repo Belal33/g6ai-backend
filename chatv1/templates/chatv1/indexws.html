@@ -300,6 +300,11 @@
             />
             <input type="submit" value="SEND" />
           </form>
+          <form action="voice/" method="post">
+            {% csrf_token %}
+            <input type="file" name="file" id="file-input">
+            <button style="padding:10px" value="submit" id ="upload-button">send file</button>
+          </form>
         </div>
         <!-- end container -->
       </section>
@@ -311,12 +316,12 @@
       console.log(protocol)
       let wsprotocol = protocol == "https"? "wss":"ws"
       
-      let form = document.querySelector("form")
+      let form = document.querySelector(".message-form")
       let resdiv = document.querySelector(".response")
       let token = "ac2744d6b40b908f7c14bf5b6165b6dfc7dd2680"// chatg6
       let url = `wss://www.chatg6.ai/ws/socket-chat/?token=${token}`// 
     
-      // token = "12efe8bf7e5ce5a8380c9f525f0e3c9d2b0a92fa" // local
+      // token = "0d5ab4b49d2bb0f48b7270dc484bbd57aba31cc0" // local
       // url = `${wsprotocol}://${window.location.host}/ws/socket-chat/?token=${token}`
       const chatsocket= new WebSocket(url)
       let lastmessage = ""
@@ -331,10 +336,33 @@
       e.preventDefault()
       lastmessage = ""
       let message = e.target.prompt.value
-      chatsocket.send(JSON.stringify({content:message}))
+      chatsocket.send(JSON.stringify({
+        content:[["user",message]],
+        chat_id : "8af255c7-b223-4368-be0e-f931d3ad358a"
+      }))
       e.target.reset()
     })
+    
 
+
+    const fileInput = document.getElementById("file-input");
+    const uploadButton = document.getElementById("upload-button");
+
+    uploadButton.addEventListener("click", () => {
+      const formData = new FormData();
+      formData.append("file", fileInput.files[0]);
+
+      url = `http://${window.location.host}/api/v1/chat/voice/`
+      fetch(url, {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);  // Do something with the response data
+        })
+        .catch((error) => console.error(error));
+    });
     </script>
   </body>
 </html>
