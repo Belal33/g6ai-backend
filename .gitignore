@@ -1,6 +1,6 @@
 .venv/
 .env
 __pycache__/
+test.py
 db.sqlite3
 AI_Modules_hameed.webm
-test.py
