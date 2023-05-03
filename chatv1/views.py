@@ -21,6 +21,7 @@ from .models import ChatBox, ChatMessage
 from .Paginations import CustomPagination
 
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 
 @api_view(["POST"])
@@ -125,6 +126,7 @@ class FileUploadSerializer(serializers.Serializer):
         return value
 
 
+@method_decorator(csrf_exempt, name="dispatch")
 class FileUploadView(CreateAPIView):
     permission_classes = [AllowAny]
     parser_classes = [FileUploadParser]
