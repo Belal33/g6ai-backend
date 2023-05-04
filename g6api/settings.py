@@ -87,20 +87,23 @@ MIDDLEWARE = [
 
 # new
 CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ORIGIN_WHITELIST = (
-#     "http://localhost:3000",
-#     "http://127.0.0.1:3000",
-#     "http://localhost:8000",
-#     "http://127.0.0.1:8000",
-#     "https://g6ai-backend.herokuapp.com",
-#     "https://api.chatg6.ai",
-#     "https://chatg6.ai",
-#     "https://www.chatg6.ai",
-# )
+CORS_ORIGIN_WHITELIST = (
+    "https://chatg6.ai",
+    "https://www.chatg6.ai",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "https://chatg6-frontend.herokuapp.com",
+    "https://g6ai-backend.herokuapp.com",
+    "https://api.chatg6.ai",
+)
 
 # frontendhost
 CSRF_TRUSTED_ORIGINS = [
+    "https://chatg6-frontend.herokuapp.com",
     "http://127.0.0.1:3000",
+    "https://www.chatg6.ai",
     "https://chatg6.ai",
     "http://localhost:3000",
     "https://g6ai-backend.herokuapp.com/",
