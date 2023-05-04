@@ -13,7 +13,10 @@ from dj_rest_auth.registration.views import SocialAccountListView, ConfirmEmailV
 from dj_rest_auth.jwt_auth import get_refresh_view
 from rest_framework_simplejwt.views import TokenVerifyView
 
-from .views import GoogleLogin  # , google_callback, oauth2_callback, oauth2_login
+from .views import (
+    GoogleLogin,
+    MyRegisterView,
+)  # , google_callback, oauth2_callback, oauth2_login
 
 # from allauth.account.views import confirm_email as allauthemailconfirmation
 
@@ -45,6 +48,7 @@ urlpatterns = [
     # path('logout/', LogoutView.as_view(), name='rest_logout'),
     # path('user/', UserDetailsView.as_view(), name='rest_user_details'),
     # path('password/change/', PasswordChangeView.as_view(), name='rest_password_change'),
+    path("registration/", MyRegisterView.as_view()),
     path("registration/", include("dj_rest_auth.registration.urls")),
     # path('socialaccounts/', SocialAccountListView.as_view(), name='social_account_list'),
     path("google/", GoogleLogin.as_view(), name="google_login"),
