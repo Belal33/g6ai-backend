@@ -145,8 +145,8 @@ class FileUploadView(CreateAPIView):
         print("dict(request.data)" * 50)
 
         if file_serializer.is_valid():
-            file_s = file_serializer.validated_data.get("file", None)
-            print(dir(file_s))
+            file = file_serializer.validated_data.get("file", None)
+            # print(dir(file_s))
             # ['DEFAULT_CHUNK_SIZE', '__bool__', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__enter__', '__eq__', '__exit__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_get_name', '_name', '_set_name', 'charset', 'chunks', 'close', 'closed', 'content_type', 'content_type_extra', 'encoding', 'field_name', 'file', 'fileno', 'flush', 'isatty', 'multiple_chunks', 'name', 'newlines', 'open', 'read', 'readable', 'readinto', 'readline', 'readlines', 'seek', 'seekable', 'size', 'tell', 'truncate', 'writable', 'write', 'writelines']
             print(file.name)
             for i in range(5):
@@ -162,11 +162,17 @@ class FileUploadView(CreateAPIView):
                             {"error": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                         )
-                    # size = file.size
-                    # duration = size / 128_000 * 8
-                    # f = file.file
-                    # f.name = file.name
-                    # res = openai.Audio.transcribe("whisper-1", f)
+                    f = file.read()
+                    base64data = f.split(",")[1]
+
+                    decoded_data = base64.b64decode(base64data)
+                    with open("nnd.webm", "wb") as n_f:
+                        n_f.write(decoded_data)
+
+                    size = file.size
+                    duration = size / 128_000 * 8
+                    webm_file = open("nnd.webm").read()
+                    res = openai.Audio.transcribe("whisper-1", webm_file)
 
             return Response(
                 {
