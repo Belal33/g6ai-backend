@@ -162,7 +162,7 @@ class FileUploadView(CreateAPIView):
                             {"error": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                         )
-                    f = file.file
+                    f = file
                     base64data = f.split(",")[1]
 
                     decoded_data = base64.b64decode(base64data)
