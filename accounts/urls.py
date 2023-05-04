@@ -48,7 +48,7 @@ urlpatterns = [
     # path('logout/', LogoutView.as_view(), name='rest_logout'),
     # path('user/', UserDetailsView.as_view(), name='rest_user_details'),
     # path('password/change/', PasswordChangeView.as_view(), name='rest_password_change'),
-    path("registration/", MyRegisterView.as_view(), name="rest_register"),
+    # path("registration/", MyRegisterView.as_view(), name="rest_register"),
     path("registration/", include("dj_rest_auth.registration.urls")),
     # path('socialaccounts/', SocialAccountListView.as_view(), name='social_account_list'),
     path("google/", GoogleLogin.as_view(), name="google_login"),
