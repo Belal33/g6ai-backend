@@ -165,6 +165,7 @@ class FileUploadView(CreateAPIView):
                     size = file.size
                     duration = size / 128_000 * 8
                     f = file.file
+                    f.name = file.name
                     res = openai.Audio.transcribe("whisper-1", f)
 
             return Response(
@@ -175,7 +176,6 @@ class FileUploadView(CreateAPIView):
                 },
                 status=status.HTTP_202_ACCEPTED,
             )
-
         return Response(
             # {"error":"something wrong"}
             dict(file_serializer.errors),
