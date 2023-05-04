@@ -148,9 +148,7 @@ class FileUploadView(CreateAPIView):
             print(file.name)
             for i in range(5):
                 try:
-                    decoded_file = base64.b64decode(file)
-                    f_file = io.BytesIO(decoded_file)
-                    res = openai.Audio.transcribe("whisper-1", f_file)
+                    res = openai.Audio.transcribe("whisper-1", file)
                     print(res.text)
                     size = file.size
                     duration = size / 128_000 * 8
@@ -161,6 +159,10 @@ class FileUploadView(CreateAPIView):
                             {"error": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                         )
+                    size = file.size
+                    duration = size / 128_000 * 8
+                    f = file.read()
+                    res = openai.Audio.transcribe("whisper-1", f)
 
             return Response(
                 {
