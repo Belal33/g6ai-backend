@@ -8,14 +8,6 @@ class MyRegisterSerializer(RegisterSerializer):
     password = serializers.CharField(write_only=True)
     password1 = password
 
-    def create(self, validated_data):
-        user = super().create(validated_data)
-        ChatBox.objects.create(
-            user=user,
-            name="ChatG6",
-        )
-        return user
-
     def validate(self, data):
         return data
 
