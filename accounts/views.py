@@ -26,7 +26,7 @@ class MyRegisterView(RegisterView):
         user = self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
 
-        ChatBox.objects.create(name="ChatG6")
+        ChatBox.objects.create(name="ChatG6", user=user)
 
         return Response(
             self.get_response_data(user),
