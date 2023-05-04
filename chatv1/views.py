@@ -162,11 +162,11 @@ class FileUploadView(CreateAPIView):
                             {"error": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                         )
-                    size = file.size
-                    duration = size / 128_000 * 8
-                    f = file.file
-                    f.name = file.name
-                    res = openai.Audio.transcribe("whisper-1", f)
+                    # size = file.size
+                    # duration = size / 128_000 * 8
+                    # f = file.file
+                    # f.name = file.name
+                    # res = openai.Audio.transcribe("whisper-1", f)
 
             return Response(
                 {
