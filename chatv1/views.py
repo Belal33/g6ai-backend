@@ -4,6 +4,10 @@ from rest_framework.generics import (
     RetrieveDestroyAPIView,
     ListAPIView,
 )
+import io
+import base64
+
+
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FileUploadParser
@@ -144,7 +148,9 @@ class FileUploadView(CreateAPIView):
             print(file.name)
             for i in range(5):
                 try:
-                    res = openai.Audio.transcribe("whisper-1", file)
+                    decoded_file = base64.b64decode(file)
+                    f_file = io.BytesIO(decoded_file)
+                    res = openai.Audio.transcribe("whisper-1", f_file)
                     print(res.text)
                     size = file.size
                     duration = size / 128_000 * 8
