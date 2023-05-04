@@ -137,9 +137,12 @@ class FileUploadView(CreateAPIView):
     serializer_class = FileUploadSerializer
 
     def post(self, request):
-        print(dict(request.data))
+        # print(dict(request.data))
         file = request.FILES.get("file", None)
         file_serializer = FileUploadSerializer(data={"file": file})
+        print("dict(request.data)" * 50)
+        print(file.content_type)
+        print("dict(request.data)" * 50)
 
         if file_serializer.is_valid():
             file = file_serializer.validated_data.get("file", None)
@@ -161,7 +164,7 @@ class FileUploadView(CreateAPIView):
                         )
                     size = file.size
                     duration = size / 128_000 * 8
-                    f = file.read()
+                    f = file.file
                     res = openai.Audio.transcribe("whisper-1", f)
 
             return Response(
