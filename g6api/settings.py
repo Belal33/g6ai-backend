@@ -103,6 +103,7 @@ CORS_ORIGIN_WHITELIST = (
 
 # frontendhost
 CSRF_TRUSTED_ORIGINS = [
+    "https://chatg6.surge.sh",
     "https://chatg6-frontend.herokuapp.com",
     "http://127.0.0.1:3000",
     "https://www.chatg6.ai",
