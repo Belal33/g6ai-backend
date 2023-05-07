@@ -10,6 +10,7 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
             self.accept()
 
         elif user.is_anonymous:
+            self.send_json({"error": "user authentication fialed"})
             self.close(code=401)
 
         else:
@@ -34,7 +35,15 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
             self.send_json({"error": "this content is not valid"})
             self.close(code=400)
 
-        if not (new_msg_tokens > 399):
+        if new_msg_tokens > 399:
+            self.send_json(
+                {
+                    "content": f"system messages can't contain more than 400 tokens \ncurrent message contain {new_msg_tokens} tokens",
+                    "status": "not_valid",
+                }
+            )
+
+        elif not (new_msg_tokens > 399):
             chat_boxes = ChatBox.objects.filter(
                 id=chat_id,
                 user=user,
