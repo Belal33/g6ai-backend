@@ -1,6 +1,7 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 
 from rest_framework.generics import (
     CreateAPIView,
@@ -172,15 +173,19 @@ class FileUploadView(CreateAPIView):
                     print(file_name)
                     print(file.content_type)
                     print("f" * 20)
-                    webm_file = ContentFile(file_content, name=file_name)
-
-                    try:
-                        res = openai.Audio.transcribe("whisper-1", webm_file)
-                    except Exception as e:
-                        return Response(
-                            {"error": str(e) + "2"},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                        )
+                    webm_file = ContentFile(file_content)
+                    file_path = default_storage.save(file_name, webm_file)
+                    # try:
+                    #     res = openai.Audio.transcribe("whisper-1", webm_file)
+                    # except Exception as e:
+                    #     return Response(
+                    #         {"error": str(e) + "2"},
+                    #         status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    #     )
+                    return Response(
+                        {"error": file_path},
+                        status=status.HTTP_200_OK,
+                    )
 
             return Response(
                 {
