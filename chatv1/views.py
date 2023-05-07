@@ -169,8 +169,13 @@ class FileUploadView(CreateAPIView):
                     file_content = file.read()
                     file_name = file.name
                     webm_file = ContentFile(file_content, name=file_name)
-
-                    res = openai.Audio.transcribe("whisper-1", webm_file)
+                    try:
+                        res = openai.Audio.transcribe("whisper-1", webm_file)
+                    except Exception as e:
+                        return Response(
+                            {"error": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                        )
 
             return Response(
                 {
