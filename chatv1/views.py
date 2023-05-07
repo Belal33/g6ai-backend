@@ -1,11 +1,13 @@
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.core.files.base import ContentFile
+
 from rest_framework.generics import (
     CreateAPIView,
     ListCreateAPIView,
     RetrieveDestroyAPIView,
     ListAPIView,
 )
-import io
-import base64
 
 
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -14,18 +16,16 @@ from rest_framework.parsers import MultiPartParser, FileUploadParser
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 
-import openai
 
+import openai
+import io
+import base64
 
 from .serializers import ChatBoxSerializer, ChatMessageSerializer
 from .models import ChatBox, ChatMessage
 from .Paginations import CustomPagination
-
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
 
 
 @api_view(["POST"])
@@ -162,16 +162,14 @@ class FileUploadView(CreateAPIView):
                             {"error": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                         )
-                    f = file.read()
-                    base64data = f.split(",")[1]
-
-                    decoded_data = base64.b64decode(base64data)
-                    with open("nnd.webm", "wb") as n_f:
-                        n_f.write(decoded_data)
 
                     size = file.size
                     duration = size / 128_000 * 8
-                    webm_file = open("nnd.webm").read()
+
+                    file_content = file.read()
+                    file_name = file.name
+                    webm_file = ContentFile(file_content, name=file_name)
+
                     res = openai.Audio.transcribe("whisper-1", webm_file)
 
             return Response(
