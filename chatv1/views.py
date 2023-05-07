@@ -133,7 +133,7 @@ class FileUploadSerializer(serializers.Serializer):
 @method_decorator(csrf_exempt, name="dispatch")
 class FileUploadView(CreateAPIView):
     permission_classes = [AllowAny]
-    parser_classes = [MultiPartParser, FileUploadParser]
+    parser_classes = [FileUploadParser, "audio/webm"]
     serializer_class = FileUploadSerializer
 
     def post(self, request):
@@ -170,6 +170,7 @@ class FileUploadView(CreateAPIView):
                     file_name = "file.webm"
                     print("f" * 20)
                     print(file_name)
+                    print(file.content_type)
                     print("f" * 20)
                     webm_file = ContentFile(file_content, name=file_name)
 
