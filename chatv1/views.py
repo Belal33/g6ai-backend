@@ -159,7 +159,7 @@ class FileUploadView(CreateAPIView):
                 except Exception as e:
                     if i == 4:
                         return Response(
-                            {"error": str(e)},
+                            {"error": str(e) + "1"},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                         )
 
@@ -173,7 +173,7 @@ class FileUploadView(CreateAPIView):
                         res = openai.Audio.transcribe("whisper-1", webm_file)
                     except Exception as e:
                         return Response(
-                            {"error": str(e)},
+                            {"error": str(e) + "2"},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                         )
 
