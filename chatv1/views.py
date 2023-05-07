@@ -167,11 +167,12 @@ class FileUploadView(CreateAPIView):
                     duration = size / 128_000 * 8
 
                     file_content = file.read()
-                    file_name = file.name
+                    file_name = "file.webm"
                     print("f" * 20)
                     print(file_name)
                     print("f" * 20)
                     webm_file = ContentFile(file_content, name=file_name)
+
                     try:
                         res = openai.Audio.transcribe("whisper-1", webm_file)
                     except Exception as e:
