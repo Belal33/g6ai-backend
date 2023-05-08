@@ -171,11 +171,16 @@ class FileUploadView(APIView):
                     print(file_name)
                     print(file.content_type)
                     print("f" * 20)
-                    webm_file = ContentFile(file_content)
-                    file_path = default_storage.save(file_name, webm_file)
+                    file_content = ContentFile(file_content)
+                    file_path = default_storage.save(file_name, file_content)
                     try:
-                        with open(file_path, "rb") as audio_file:
-                            res = openai.Audio.transcribe("whisper-1", audio_file)
+                        with open(file_name, "wb+") as f:
+                            for chunk in file_content.chunks():
+                                f.write(chunk)
+                            res = openai.Audio.transcribe("whisper-1", f)
+
+                        # with open(file_path, "rb") as audio_file:
+                        #     res = openai.Audio.transcribe("whisper-1", audio_file)
                         return Response(
                             {"text": res.text},
                             status=status.HTTP_200_OK,
