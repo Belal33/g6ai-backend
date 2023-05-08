@@ -179,7 +179,7 @@ class FileUploadView(APIView):
                         #         f.write(chunk)
                         #     res = openai.Audio.transcribe("whisper-1", f)
 
-                        with open("test.webm", "rb") as audio_file:
+                        with open("media/test.webm", "rb") as audio_file:
                             res = openai.Audio.transcribe("whisper-1", audio_file)
                         return Response(
                             {"text": res.text},
