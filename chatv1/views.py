@@ -132,15 +132,13 @@ class FileUploadSerializer(serializers.Serializer):
 
 
 @method_decorator(csrf_exempt, name="dispatch")
-class FileUploadView(CreateAPIView):
+class FileUploadView(APIView):
     permission_classes = [AllowAny]
     parser_classes = [FileUploadParser]
-    serializer_class = FileUploadSerializer
 
     def post(self, request):
         # print(dict(request.data))
         file = request.FILES.get("file", None)
-        file_serializer = FileUploadSerializer(data=request.data)
         print("dict(request.data)" * 50)
         print(file.content_type)
         print("dict(request.data)" * 50)
@@ -196,8 +194,7 @@ class FileUploadView(CreateAPIView):
                 status=status.HTTP_202_ACCEPTED,
             )
         return Response(
-            # {"error":"something wrong"}
-            dict(file_serializer.errors),
+            {"error": "something wrong"},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
