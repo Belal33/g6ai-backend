@@ -176,7 +176,7 @@ class FileUploadView(APIView):
                     try:
                         with open(file_name, "wb") as f:
                             # for chunk in file_content.chunks():
-                            f.write(file)
+                            f.write(file.read())
                         # res = openai.Audio.transcribe("whisper-1", f)
 
                         with open(file_name, "rb") as audio_file:
