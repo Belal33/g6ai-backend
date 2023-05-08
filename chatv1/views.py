@@ -133,67 +133,39 @@ class FileUploadSerializer(serializers.Serializer):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class FileUploadView(APIView):
-    permission_classes = [AllowAny]
-    # parser_classes = [FileUploadParser]
+    permission_classes = [IsAuthenticated]
+    # parser_classes = [MultiPartParser]
 
     def post(self, request):
         # print(dict(request.data))
-        file = request.FILES.get("file", None)
-        print("dict(request.data)" * 50)
-        print(file.content_type)
-        print("dict(request.data)" * 50)
-
+        print(dict(request.data))
+        file = request.data.get("file", None)
+        # print(file.read())
         if file:
             # file = file_serializer.validated_data.get("file", None)
             # print(dir(file_s))
             # ['DEFAULT_CHUNK_SIZE', '__bool__', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__enter__', '__eq__', '__exit__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_get_name', '_name', '_set_name', 'charset', 'chunks', 'close', 'closed', 'content_type', 'content_type_extra', 'encoding', 'field_name', 'file', 'fileno', 'flush', 'isatty', 'multiple_chunks', 'name', 'newlines', 'open', 'read', 'readable', 'readinto', 'readline', 'readlines', 'seek', 'seekable', 'size', 'tell', 'truncate', 'writable', 'write', 'writelines']
-            print(file.name)
+
             for i in range(5):
                 try:
-                    res = openai.Audio.transcribe("whisper-1", file)
-                    print(res.text)
                     size = file.size
                     duration = size / 128_000 * 8
+                    file.name = "blob.webm"
+
+                    with open(file.name, "wb+") as f:
+                        for chunk in file.chunks():
+                            f.write(chunk)
+                        # res = openai.Audio.transcribe("whisper-1", f)
+
+                    with open(file.name, "rb") as audio_file:
+                        res = openai.Audio.transcribe("whisper-1", audio_file)
                     break
                 except Exception as e:
                     if i == 4:
                         return Response(
-                            {"error": str(e) + "1"},
+                            {"error": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                         )
-
-                    size = file.size
-                    duration = size / 128_000 * 8
-
-                    file_content = file.read()
-                    file_name = "file.webm"
-                    print("f" * 20)
-                    print(file_name)
-                    print(file.content_type)
-                    print("f" * 20)
-                    file_content = ContentFile(file_content, file_name)
-                    file_path = default_storage.save(file_name, file_content)
-                    try:
-                        with open(file_name, "wb") as f:
-                            for chunk in file_content.chunks():
-                                f.write(chunk)
-                        # res = openai.Audio.transcribe("whisper-1", f)
-
-                        with open(file_name, "rb") as audio_file:
-                            res = openai.Audio.transcribe("whisper-1", audio_file)
-                        return Response(
-                            {"text": res.text},
-                            status=status.HTTP_200_OK,
-                        )
-                    except Exception as e:
-                        return Response(
-                            {"error": str(e) + "2"},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                        )
-                    return Response(
-                        {"error": file_path},
-                        status=status.HTTP_200_OK,
-                    )
 
             return Response(
                 {
@@ -203,10 +175,12 @@ class FileUploadView(APIView):
                 },
                 status=status.HTTP_202_ACCEPTED,
             )
-        return Response(
-            {"error": "something wrong"},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+
+        else:
+            return Response(
+                {"error": "something wrong"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 class ChatBoxListCreateView(ListCreateAPIView):
