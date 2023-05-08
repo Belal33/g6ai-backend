@@ -175,8 +175,8 @@ class FileUploadView(APIView):
                     file_path = default_storage.save(file_name, file_content)
                     try:
                         with open(file_name, "wb") as f:
-                            # for chunk in file_content.chunks():
-                            f.write(file.read())
+                            for chunk in file_content.chunks():
+                                f.write(chunk)
                         # res = openai.Audio.transcribe("whisper-1", f)
 
                         with open(file_name, "rb") as audio_file:
