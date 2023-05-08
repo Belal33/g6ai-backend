@@ -166,7 +166,7 @@ class FileUploadView(APIView):
                     duration = size / 128_000 * 8
 
                     file_content = file.read()
-                    file_name = "file.webm"
+                    file_name = "file.wav"
                     print("f" * 20)
                     print(file_name)
                     print(file.content_type)
