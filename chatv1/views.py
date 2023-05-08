@@ -171,7 +171,7 @@ class FileUploadView(APIView):
                     print(file_name)
                     print(file.content_type)
                     print("f" * 20)
-                    file_content = ContentFile(file_content)
+                    file_content = ContentFile(file_content, file_name)
                     file_path = default_storage.save(file_name, file_content)
                     try:
                         with open(file_name, "wb+") as f:
