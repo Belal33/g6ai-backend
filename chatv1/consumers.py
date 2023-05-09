@@ -100,7 +100,7 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
             # if response error
             except Exception as e:
                 chat_message.finish_reason = "openai.error"
-                self.send_json({"error": "openai.error", "content": str(e)})
+                self.send_json({"error": "openai.error", "content": ""})
                 chat_message.used_credits = 0
 
             chat_message.save()

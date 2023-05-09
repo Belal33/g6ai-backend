@@ -21,8 +21,7 @@ from rest_framework.decorators import api_view, parser_classes, permission_class
 
 
 import openai
-import io
-import base64
+import os
 
 from .serializers import ChatBoxSerializer, ChatMessageSerializer
 from .models import ChatBox, ChatMessage
@@ -138,7 +137,6 @@ class FileUploadView(APIView):
 
     def post(self, request):
         # print(dict(request.data))
-        print(dict(request.data))
         file = request.data.get("file", None)
         # print(file.read())
         if file:
@@ -150,7 +148,7 @@ class FileUploadView(APIView):
                 try:
                     size = file.size
                     duration = size / 128_000 * 8
-                    file.name = "blob.webm"
+                    file.name = str(request.user.id) + "blob.webm"
 
                     with open(file.name, "wb+") as f:
                         for chunk in file.chunks():
@@ -159,6 +157,7 @@ class FileUploadView(APIView):
 
                     with open(file.name, "rb") as audio_file:
                         res = openai.Audio.transcribe("whisper-1", audio_file)
+                    os.remove(file.name)
                     break
                 except Exception as e:
                     if i == 4:

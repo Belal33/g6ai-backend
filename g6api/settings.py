@@ -22,6 +22,7 @@ DEBUG = env.bool("DEBUG", default=False)
 ALLOWED_HOSTS = [
     "api.chatg6.ai",
     ".chatg6.ai",
+    "chatg6.surge.sh",
     ".herokuapp.com",
     "localhost",
     "127.0.0.1",
