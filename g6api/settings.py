@@ -142,8 +142,10 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
-# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend "  # new
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # new
+if not DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # new
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # new
 
 ########## AWS ##########
 # DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL")

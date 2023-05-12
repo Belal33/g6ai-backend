@@ -35,7 +35,7 @@ class MyAllAuthPasswordResetForm(AllAuthPasswordResetForm):
             #     f"https://www.chatg6.ai/{str(user_pk_to_url_str(user))}/{str(temp_key)}"
             # )
 
-            url = build_absolute_uri(None, path)
+            url = build_absolute_uri(None, path, "https")
             print(url)
 
             context = {
