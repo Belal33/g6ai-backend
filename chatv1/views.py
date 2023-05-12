@@ -1,7 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
+
 
 from rest_framework.generics import (
     CreateAPIView,

@@ -15,7 +15,6 @@ from rest_framework_simplejwt.views import TokenVerifyView
 
 from .views import (
     GoogleLogin,
-    MyRegisterView,
 )  # , google_callback, oauth2_callback, oauth2_login
 
 # from allauth.account.views import confirm_email as allauthemailconfirmation

@@ -1,1 +1,0 @@
-https://github.com/pennersr/django-allauth/tree/master/allauth/templates/account/email

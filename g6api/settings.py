@@ -69,7 +69,10 @@ REST_FRAMEWORK = {
 
 
 REST_AUTH_REGISTER_SERIALIZERS = {
-    "REGISTER_SERIALIZER": "accounts.serializers.MyRegisterSerializer"
+    "REGISTER_SERIALIZER": "accounts.serializers.MyRegisterSerializer",
+}
+REST_AUTH_SERIALIZERS = {
+    "PASSWORD_RESET_SERIALIZER": "accounts.serializers.CustomPasswordResetSerializer",
 }
 
 
@@ -139,7 +142,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
-# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # new
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend "  # new
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # new
 
 ########## AWS ##########
@@ -237,7 +240,7 @@ ACCOUNT_EMAIL_VERIFICATION = "optional"  #'mandatory'
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 # ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS =3  in days
 # ACCOUNT_USERNAME_BLACKLIST =[]
-ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+# ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 LOGIN_URL = "https://g6ai-backend.herokuapp.com/api/v1/auth/login/"
 
 
