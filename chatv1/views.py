@@ -10,7 +10,7 @@ from rest_framework.generics import (
 )
 
 
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FileUploadParser
 from rest_framework.response import Response
@@ -224,3 +224,13 @@ class ChatMessageListCreateView(ListAPIView):
         chatbox_id = self.kwargs["chatbox_id"]
         queryset = ChatMessage.objects.filter(user=user, chatbox_id=chatbox_id)
         return queryset
+
+
+# all messages view
+
+
+class AllMessagesListView(ListAPIView):
+    queryset = ChatMessage.objects.all()
+    serializer_class = ChatMessageSerializer
+    pagination_class = CustomPagination
+    permission_classes = [IsAuthenticated, IsAdminUser]

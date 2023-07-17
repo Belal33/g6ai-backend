@@ -77,7 +77,7 @@ class ChatMessage(models.Model):
     assistant_msg_tokens = models.IntegerField("assistant message tokens", default=0)
     finish_reason = models.CharField(max_length=10, null=True)
     voice_message = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     used_credits = models.IntegerField(default=0)
 
     def __str__(self):

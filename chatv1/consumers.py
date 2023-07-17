@@ -14,6 +14,7 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
             self.close(code=401)
 
         else:
+            self.send_json({"error": "user authentication fialed"})
             self.close(code=401)
 
     def receive_json(self, res):
@@ -55,7 +56,6 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
                 if sys_msg:
                     print(sys_msg)
                     msgs.append(["system", sys_msg])
-                print("no", sys_msg)
 
             else:
                 self.send_json({"error": "this chatbox does not exist"})
@@ -99,7 +99,7 @@ class TokenAuthConsumer(JsonWebsocketConsumer):
                 ######### generator response #########
             # if response error
             except Exception as e:
-                chat_message.finish_reason = "openai.error"
+                chat_message.finish_reason = str(e)
                 self.send_json({"error": "openai.error", "content": ""})
                 chat_message.used_credits = 0
 
